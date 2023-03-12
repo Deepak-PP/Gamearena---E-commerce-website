@@ -1,0 +1,60 @@
+
+                    <table class="table table-hover tm-table-small tm-product-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">SL.No</th>
+                                <th scope="col">DATE</th>
+                                <th scope="col">TIME</th>
+                                <th scope="col">PRODUCTS</th>
+                                <th scope="col">CUSTOMER</th>
+                                <th class="pl-5" scope="col">TOTAL</th>
+
+                                <th scope="col">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(orderData.length>0) {
+                                for(let i=0;i <orderData.length; i++){ %>
+                                    <tr>
+
+                                        <td>
+                                            <%= [i] %>
+                                        </td>
+                                        <td class="tm-product-DATE">
+                                            <%= orderData[i].createdAt.toString().slice(0,16) %>
+                                        </td>
+                                        <td id="em1">
+                                            <%= orderData[i].createdAt.toString().slice(16,24) %>
+                                        </td>
+                                        <td>
+                                            <% for(products of orderData[i].products){ %>
+                                                <% for(let j=0;j<products.item.length;j++){ %>
+
+                                                    <%=products.quantity %> x <%= products.item[j].name %><br>
+
+                                                            <% } %>
+
+                                                                <% } %>
+
+                                        </td>
+                                        <td>
+                                            <%= addressData[0].name %>
+                                        </td>
+                                        <td>
+                                            <%= orderData[i].total %>
+                                        </td>
+
+                                    </tr>
+
+                                    <% } %>
+
+                                        <%}else { %>
+                                            <tr>
+                                                <td colspan="5">No orders</td>
+
+                                            </tr>
+                                            <% } %>
+
+                        </tbody>
+                    </table>
+                

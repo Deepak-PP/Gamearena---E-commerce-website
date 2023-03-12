@@ -1,0 +1,161 @@
+
+
+<%- include('../layouts/header.ejs') %>
+
+<div class="container-fluid ">
+    <% if(user_in){ %>
+    <div class="row px-xl-5 justify-content-center">
+    
+  <table class="table align-middle mb-0 bg-dark text-light">
+    <thead class="bg-dark text-light">
+      <tr>
+        <th>Order Id</th>
+        <th>Order Status</th>
+        <th>Payment status</th>
+        <th>DATE</th>
+        <th>TIME</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+       <% if(orderData.length>0){
+            for(let i=0;i<orderData.length;i++){ %>
+
+                <tr>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <i class="fa-solid fa-check-to-slot"></i>
+                        <div class="ms-3">
+                          <p class="fw-bold mb-1"><%=orderData[i]._id%></p>
+                          <p class="text-muted mb-0"><%=orderData[i].products.length%> Products</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <% if(orderData[i].order_status == "Placed"){ %>
+                         <p class="fw-normal mb-1 badge badge-info rounded-pill d-inline"><%=orderData[i].order_status%></p>
+
+                     <% }else if(orderData[i].order_status == "Shipped"){ %>
+                        <p class="fw-normal mb-1 badge badge-warning rounded-pill d-inline">
+                          <%=orderData[i].order_status%>
+                        </p>
+                      
+
+                     <% }else if(orderData[i].order_status == "Out for Delivery"){ %>
+                        <p class="fw-normal mb-1 badge badge-light rounded-pill d-inline">
+                          <%=orderData[i].order_status%>
+                        </p>
+
+                    <% }else if(orderData[i].order_status == "Delivered"){ %>
+                        <p class="fw-normal mb-1 badge badge-success rounded-pill d-inline">
+                          <%=orderData[i].order_status%>
+                        </p>
+
+                      <% }else if(orderData[i].order_status == "Cancelled"){ %>
+                          <p class="fw-normal mb-1 badge badge-danger rounded-pill d-inline">
+                            <%=orderData[i].order_status%>
+                          </p>
+
+                        <% } %>
+                    </td>
+
+
+                    <td>
+                      <% if(orderData[i].payment_status == "pending" ){ %>
+                        <span class="badge badge-warning rounded-pill d-inline">
+                          <%=orderData[i].payment_status%>
+                        </span>
+                    
+                        <% }else if(orderData[i].payment_status =="completed" ){ %>
+                          <span class="badge badge-success rounded-pill d-inline">
+                            <%=orderData[i].payment_status%>
+                          </span>
+                    
+                    
+                          <% }else if(orderData[i].payment_status == "Failed" ){ %>
+                          <span class="badge badge-danger rounded-pill d-inline">
+                            <%=orderData[i].payment_status%>
+                          </span>
+                    
+                                <% } %>
+                    
+                    </td>
+                   
+                    <td><%=orderData[i].created_date.toString().slice(0,16)%></td>
+                      <td>
+                        <%=orderData[i].created_date.toString().slice(16,24)%>
+                      </td>
+                    <td>
+                      <% if(orderData[i].order_status == "pending" || orderData[i].order_status == "Placed" ){ %>
+
+                         <form action="/ordercancel/?id=<%=orderData[i]._id%>" method="POST">
+                      <button onclick=" formSubmit()" type="submit" class="btn btn-link btn-sm btn-rounded">
+                        Cancel Order
+                      </button>
+                      </form>
+
+                    <% }else{ %>
+
+                   <% } %>
+                     
+                     <a href="/orderview/?id=<%=orderData[i]._id%>"> <button type="button" class="btn btn-link btn-sm btn-rounded">
+                        View Order
+                      </button></a>
+                    </td>
+                  </tr>
+
+                  <% } %>
+                  <%}else { %>
+                      <tr>
+                          <td colspan="5">Currently no orders</td>
+                      </tr>
+                      <% } %>
+    </tbody>
+  </table>
+    </div>
+    <% } 
+    else{ %>
+
+     <a href="/login"> <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Please  Sign In to continue</button></a>
+     <div class="row px-xl-5 justify-content-center"></div>
+
+   <% } %>
+</div>
+
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+
+<script>
+  
+  function formSubmit() {
+    event.preventDefault(); // prevent form submit
+    let form = event.target.form; // storing the form
+    swal({
+        title: "Are you sure?",
+        text: "Your order will be cancelled",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor:"#DD6B55",
+        confirmButtonText: "Yes, cancel order",
+        cancelButtonText: "No, Abort!",
+        closeOnConfirm: false,
+        closeOnCancel: false,
+
+    },
+        function (isConfirm) {
+            if (isConfirm) {
+                form.submit();          // submitting the form when user press yes
+            } else {
+                swal("Cancelled", "Your Order is safe", "error");
+            }
+        });
+}
+
+</script>
+
+  <%- include('../layouts/footer.ejs') %>

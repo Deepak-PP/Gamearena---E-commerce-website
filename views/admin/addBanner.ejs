@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Add Product - Dashboard HTML Template</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700" />
+    <!-- https://fonts.google.com/specimen/Roboto -->
+    <link rel="stylesheet" href="/fontawesome.min.css" />
+    <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="jquery-ui-datepicker/jquery-ui.min.css" type="text/css" />
+    <!-- http://api.jqueryui.com/datepicker/ -->
+    <link rel="stylesheet" href="/bootstrap.min.css" />
+    <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="/templatemo-style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <!--
+	Product Admin CSS Template
+	https://templatemo.com/tm-524-product-admin
+	-->
+</head>
+
+<body
+    style="background-image: url(https://images.pexels.com/photos/1069798/pexels-photo-1069798.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1); background-size: cover;">
+</body>>
+<nav class="navbar navbar-expand-xl pl-1">
+    <a href="" class="text-decoration-none">
+        <span class="h1 text-uppercase text-danger px-2" style=" background-color: rgba(0, 0, 0, 0.6);">Game</span>
+        <span class="h1 text-uppercase text-dark bg-danger px-2 ml-n1">Arena</span>
+    </a>
+    <div class="container h-100">
+
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mx-auto h-100">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/dash">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/sales">
+                    <i class="far fa-file-alt"></i></i> Reports
+                </a>
+            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/categories">
+                        <i class="fa-solid fa-puzzle-piece"></i> Categories
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin/products">
+                        <i class="fas fa-shopping-cart"></i> Products
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/orders">
+                        <i class="fa-regular fa-rectangle-list"></i> Orders
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/customers">
+                        <i class="far fa-user"></i> Customers
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/coupon">
+                        <i class="fa-solid fa-ticket"></i> Coupons
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/banner">
+                        <i class="fa-solid fa-panorama"></i> Banner
+                    </a>
+                </li>
+
+
+
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link d-block" href="/admin/adminLogout">
+                        Admin, <b>Logout</b>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container tm-mt-big tm-mb-big">
+    <div class="row">
+        <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+            <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="tm-block-title d-inline-block">EDIT BANNER</h2>
+                    </div>
+                </div>
+                <% if(typeof message !=='undefined' ){ %>
+                    <p style="color: rgb(173, 0, 0);">
+                        <%= message %>
+                    </p>
+                    <% } %>
+            <form action="/admin/bannerAdd" method="POST" enctype="multipart/form-data">
+                <div class="row mt-3">
+                    <b class="ml-4">ADD BANNER</b>
+                    <div class="col-md-12 ">
+                        <label class="labels"></label>
+                        <input type="text" name="name" class="form-control" required placeholder="Banner name" value="">
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <label class="labels">Choose Image:</label>
+                        <input type="file" name="image[]" accept=".JPEG,.JPG,.PNG" multiple data-parsley-trigger="change"
+                            id="customFile">
+                        <br>
+                        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner"></div>
+                            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                                <span class="carousel-control" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                                <span class="carousel-control" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div id="description-fields" class="col-md-12 text-light bg-dark">
+                        <!-- Description fields will be dynamically added here -->
+                    </div>
+                </div>
+                <div class="mt-5 text-center">
+                    <button class="btn btn-primary profile-button" type="submit">ADD BANNER</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<footer class="tm-footer row tm-mt-small">
+    <div class="col-12 font-weight-light">
+        <p class="text-center text-white mb-0 px-4 small">
+            Copyright &copy; <b>2018</b> All rights reserved.
+
+            Design: <a rel="nofollow noopener" href="https://templatemo.com" class="tm-footer-link">Template Mo</a>
+        </p>
+    </div>
+</footer>
+
+<script src="/jquery-3.3.1.min.js"></script>
+
+<!-- https://jquery.com/download/ -->
+<script src="/jquery-ui.min.js"></script>
+<!-- https://jqueryui.com/download/ -->
+<script src="/bootstrap.min.js"></script>
+
+<script src="https://kit.fontawesome.com/d4801b7ff5.js" crossorigin="anonymous"></script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<!-- https://getbootstrap.com/ -->
+<script>
+    $(function () {
+        $("#expire_date").datepicker();
+    });
+
+
+    const fileInput = document.querySelector('input[type="file"]');
+    fileInput.addEventListener('change', displayImages);
+
+    function displayImages() {
+        const carouselInner = document.querySelector('.carousel-inner');
+        carouselInner.innerHTML = ''; // clear any existing images
+
+        const files = this.files;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                const image = document.createElement('img');
+                image.className = 'd-block w-100';
+                image.src = this.result;
+
+                const carouselItem = document.createElement('div');
+                carouselItem.className = 'carousel-item';
+                if (i === 0) {
+                    carouselItem.classList.add('active');
+                }
+                carouselItem.appendChild(image);
+
+                carouselInner.appendChild(carouselItem);
+            }
+        }
+    }
+
+    const inputFile = document.querySelector('#customFile');
+        const descriptionFieldsContainer = document.querySelector('#description-fields');
+
+        // Listen for changes to the file input field
+        inputFile.addEventListener('change', (event) => {
+            const numImages = event.target.files.length;
+            // Remove any existing description fields
+            descriptionFieldsContainer.innerHTML = '';
+            // Create a description input field for each image
+            for (let i = 0; i < numImages; i++) {
+                const descriptionInput = document.createElement('input');
+                descriptionInput.type = 'text';
+                descriptionInput.name = 'description[]';
+                descriptionInput.classList.add('form-control');
+                descriptionInput.required = true;
+                descriptionInput.placeholder = `Banner Description ${i + 1}`;
+                descriptionFieldsContainer.appendChild(descriptionInput);
+            }
+        });
+
+</script>
+</body>
+
+</html>

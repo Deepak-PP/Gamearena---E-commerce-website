@@ -1,0 +1,562 @@
+<%- include('../layouts/header.ejs') %>
+    <!-- Navbar End -->
+
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="#">Home</a>
+                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                    <span class="breadcrumb-item active">Checkout</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Checkout Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-lg-8">
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing
+                        Address</span></h5>
+                <div class="bg-dark p-30 mb-5">
+                    <div class="row">
+
+
+                        <br><br>
+                        <div style="display: flex;flex-direction: column;">
+                            <div class="d-flex">
+                                <b class="ml-2">CHOOSE ADDRESS:</b>
+                                <a href="" id="add-address-link" class="ml-auto">ADD ADDRESS</a>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" class="form-control border-0 p-4" id="fieldvalue" placeholder="Coupon Code">
+                                <div class="input-group-append">
+                                    <button onclick="applycoupon()" class="btn btn-primary">Apply Coupon</button>
+                                </div>
+                            </div>
+
+                           
+                                <div class="container d-flex justify-content-center">
+                                    <ul class="list-group  text-white">
+
+                                        <% addressdata.forEach(function(address) { %>
+
+
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-content-center">
+
+                                                <div class="d-flex flex-row">
+
+                                                    <div class="ml-2">
+                                                        <h6 class="mb-0 text-light">
+                                                            <%= address.name %>
+                                                        </h6>
+                                                        <div class="about">
+                                                            <span>
+                                                                <%= address.address1 %>
+                                                            </span>
+                                                            <span>
+                                                                <%= address.street %>
+                                                            </span>
+                                                            <span> <br>
+                                                                <%= address.city %>
+                                                            </span>
+                                                            <span> <br>
+                                                                <%= address.state %>
+                                                            </span>
+                                                            <span> <br>
+                                                                <%= address.mobile %>
+                                                            </span>
+                                                            <span> <br>
+                                                                <%= address.postalCode %>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="check">
+
+                                                    <input type="checkbox" name="address" value="<%= address._id %>">
+                                                </div>
+
+
+                                            </li>
+                                            <% }) %>
+                                    </ul>
+                                </div>
+                        </div>
+                    
+                    <div>
+                        <div class="card ml-5 mt-4 bg-dark" style="width: 22rem;">
+                            <div class="card-header text-danger">
+                                Available coupons
+                            </div>
+                            <ul class=" list-group-flush px-2">
+                                <% for(let i=0;i<availableCoupons.length;i++){ %>
+                                    <li id="couponUse-<%=i%>" onclick="useCoupon('<%=i%>')" class="list-group-item"><%=availableCoupons[i].couponcode%></li>
+                        
+                                    <% } %>
+                        
+                        
+                            </ul>
+                        </div>
+
+                </div>
+                       
+
+            </div>
+                   
+        </div>
+
+            </div>
+
+            <div class="col-lg-4">
+                
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order
+                        Total</span></h5>
+                        
+                <div class="bg-dark p-30 mb-5 text-light">
+                    <div class="border-bottom">
+                        <h6 class="mb-3 text-danger">Products</h6>
+                        <% if(productDatas.length>0){
+                            for(let i=0;i<productDatas.length;i++) { %>
+                                <div class="d-flex justify-content-between">
+                                    <p>
+                                        <%=productDatas[i].name%>
+                                    </p>
+                                    <p>
+                                        <%=value[i].pricetotal%>
+                                    </p>
+                                </div>
+
+                                <% } %>
+                                    <%}else { %>
+                                        <tr>
+                                            <td colspan="5">You have no products in the cart</td>
+                                        </tr>
+                                        <% } %>
+
+
+                    </div>
+                    <div class="border-bottom pt-3 pb-2">
+                        <div class="d-flex justify-content-between mb-3">
+                            <% let prices=0; %>
+                                <% for(let j=0;j<productDatas.length;j++) { %>
+                                    <% prices +=value[j].pricetotal; %>
+                                        <% } %>
+                                            <h6 class="text-danger">Subtotal </h6>
+                                            <h6 class="text-danger" id="subtotalValue">
+                                                <%= prices %>
+                                            </h6>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <h6 class="font-weight-medium text-danger">Coupon Discount</h6>
+                            <input type="hidden" id="cpndiscnt" value="0">
+                           
+                            <h6 class="font-weight-medium text-danger" id="discount">0</h6>
+                            
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <h6 class="font-weight-medium text-danger">Wallet Discount</h6>
+                            <input type="hidden" id="walletdiscnt" value="0">
+                        
+                            <h6 class="font-weight-medium text-danger" id="discountW">0</h6>
+                            
+                        </div>
+                  
+                    <label class="custom-radio1 text-danger">
+                        <input type="radio" id="use-wallet" onclick="useWallet()" />
+                        <span class="checkmark1"></span>
+                        <u>Use Wallet</u>
+                    </label>
+
+                    
+                    </div>
+                    <div class="pt-2">
+                        <div class="d-flex justify-content-between mt-2">
+                            <% let price=0; %>
+                                <% for(let j=0;j<productDatas.length;j++) { %>
+                                    <% price +=value[j].pricetotal; %>
+                                        <% } %>
+                                            <h5 class="text-danger">Total
+                                            </h5>
+                                            <h5 class="text-danger" id="total">
+                                                <%= price %>
+                                            </h5>
+                                </div>
+                        
+                     </div>
+                   
+                    
+             </div>
+            <h6 class="font-weight-medium text-success" id="walletAmnt">Wallet Amount:Rs <%= walletData %></h6>
+   0
+                <div class="mb-5">
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span
+                            class="bg-secondary pr-3">Payment</span></h5>
+                    <div class="bg-dark p-30">
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" value="UPI" class="custom-control-input" name="payment_method" id="paypal">
+                                <label class="custom-control-label" for="paypal">UPI(Razorpay)</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" value="cash_on_delivery" class="custom-control-input" name="payment_method" id="directcheck">
+                                <label class="custom-control-label" for="directcheck">Cash on delievry</label>
+                            </div>
+                        </div>
+                        
+                        
+                            <button onclick="orderSubmit()" class="btn1"> Place
+                            Order
+                            </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout End -->
+    <div id="address-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <form action="/orderaddress" method="POST" id="address-form">
+                <div class="row mt-3">
+                    <b class="ml-4">ADD NEW ADDRESS</b>
+                    <div class="col-md-12">
+                        <label class="labels"></label>
+                        <input type="text" name="name" class="form-control" required placeholder="Name" value="">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels"></label>
+                        <input type="text" name="address1" class="form-control" required placeholder="Address" value="">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels"></label>
+                        <input type="text" name="street" class="form-control" required placeholder="Street" value="">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels"></label>
+                        <input type="text" name="city" class="form-control" required placeholder="City" value="">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels"></label>
+                        <input type="text" name="state" class="form-control" required placeholder="State" value="">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels"></label>
+                        <input type="text" name="country" class="form-control" required placeholder="Country" value="">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels"></label>
+                        <input type="text" name="mobile" class="form-control" required placeholder="Phone NUmber"
+                            value="">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels"></label>
+                        <input type="number" name="pin" class="form-control" required placeholder="Pin" value="">
+                    </div>
+                </div>
+                <div class="mt-5 text-center">
+                    <button class="btn btn-primary profile-button" type="submit">Save Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Footer Start -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.2/dist/sweetalert2.all.min.js"></script>
+   
+    <script src="sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <script>
+        var addressModal = document.getElementById("address-modal");
+        var addAddressLink = document.getElementById("add-address-link");
+
+        addAddressLink.addEventListener("click", function (e) {
+            e.preventDefault();
+            addressModal.style.display = "block";
+        });
+
+        // To hide the modal when the user clicks outside of it
+        window.addEventListener("click", function (e) {
+            if (e.target == addressModal) {
+                addressModal.style.display = "none";
+            }
+        });
+
+        function orderSubmit(){
+            let field = document.getElementById('fieldvalue')
+            let content = field.value
+            // let couponCode = content.trim() !== ""
+           
+            let walletUsed =  document.getElementById('discountW').innerHTML.replace(/\D/g, '')
+            let couponUsed = document.getElementById('discount').innerHTML.replace(/\D/g, '')
+            let subtotal = document.getElementById('subtotalValue').innerHTML.replace(/\D/g, '')
+            const total = document.getElementById("total").innerHTML.replace(/\D/g, '')
+            const addressChecked = document.querySelector('input[name="address"]:checked');
+            const address = addressChecked.value
+            const paymentChecked = document.querySelectorAll('input[name="payment_method"]')
+            let payment_method;
+            paymentChecked.forEach((radio)=>{
+                if(radio.checked){
+                    payment_method = radio.value
+                }
+            })
+
+            if(address && payment_method ){
+                
+                $.ajax({
+                    url:'/goto_checkout',
+                    method:'POST',
+                    data:{
+                        total:total,
+                        address:address,
+                        payment_method:payment_method,
+                        couponCode: content,
+                        walletUsed:walletUsed,
+                        couponUsed: couponUsed,
+                        subtotal: subtotal
+                    },
+                    success:function(response){
+                        if(response.success == "cash_on_delivery"){
+                            location.href = '/orderplaced'
+                        }else if(response.success == "UPI"){
+                            handlePayment()
+
+                        }else{
+                            alert('Something went wrong')
+                        }
+
+                    }
+                })
+            }
+
+        }
+        function handlePayment() {
+            var orderId;
+            var amount = 500; // change this to the desired amount
+
+            $.ajax({
+                url: '/create-order',
+                method: 'POST',
+                dataType: 'json',
+                data: { amount: amount },
+                success: function (response) {
+                    orderId = response.orderId;
+            
+                    $('button').hide();
+
+                    var options = {
+                        key: 'rzp_test_lwtr5pxn4HY6Gk',
+                        amount: amount * 100, // amount in smallest currency unit
+                        currency: 'INR',
+                        name: 'GAMEARENA',
+                        description: 'Test Transaction',
+                        image: 'https://your-logo-url.png',
+                        order_id: orderId,
+                        handler: function (response) {
+                            
+                            // Handle the success response here\
+                           
+                           $.ajax({
+                            url:'/paymentpost',
+                            method:'POST',
+                            data:{orderId,payid:response.razorpay_payment_id,razorOrderid:response.razorpay_order_id,signature:response.razorpay_signature },
+                            success:function(response){
+                                console.log(response.message);
+                                
+                                location.href = '/orderplaced'
+                            }
+                           })
+                            console.log(response);
+                        },
+                        prefill: {
+                            name: 'John Doe',
+                            email: 'john.doe@example.com',
+                            contact: '+919999999999',
+                        },
+                        notes: {
+                            address: 'Address',
+                        },
+                        theme: {
+                            color: '#F37254',
+                        },
+                    };
+
+                    var rzp = new Razorpay(options);
+                    rzp.on('payment.failed', function (response) {
+                        // Handle the failed response here
+                        console.log(response.error.description);
+                        $('button').show();
+                    });
+
+                    rzp.open();
+                },
+                error: function () {
+                    console.log('Error generating order ID');
+                },
+            });
+        }
+        function applycoupon(){
+            let field = document.getElementById('fieldvalue')
+let content = field.value
+            let currenttotal = document.getElementById('total')
+
+
+if (content.trim() !== "") {
+    $.ajax({
+        url:`/couponapply/${content}`,
+        method:'get',
+        success:function(response){
+         
+          
+            if(currenttotal.innerHTML != 0){
+                 const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+                Toast.fire({
+                    icon: 'success',
+                    title: "Coupon Applied"
+                })
+                let walletdiscnt = document.getElementById("walletdiscnt").value
+                walletdiscnt = parseInt(walletdiscnt)
+            
+                document.getElementById('total').textContent = response.discountedPrice - walletdiscnt
+                document.getElementById("cpndiscnt").value = response.discountAmount
+                document.getElementById('discount').textContent = response.discountAmount
+
+                if (response.message) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: "Coupon already applied"
+                    })
+
+                }
+
+            }else{
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+                 Toast.fire({
+                    icon: 'error',
+                    title: "Sorry! Not Applicable"
+                })
+
+            }
+            
+        }
+    })
+} else {
+    alert("Please enter a coupon code")
+}
+
+        }
+
+        function useWallet(){
+            
+            let price = document.getElementById('total')
+            
+            let total1 = price.innerHTML
+            let total = total1.replace(/\D/g, '')
+            $.ajax({
+                url:'/useWallet',
+                method:'POST',
+                data:{ total},
+                success:function(response){
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+                    if(response.success == true){
+                        
+                        Toast.fire({
+                            icon: 'success',
+                            title: "Wallet Amount Applied"
+                        })
+                        document.getElementById('total').textContent = response.total
+                         document.getElementById('discountW').textContent = response.discount
+                         document.getElementById("walletdiscnt").value = response.discount
+                        document.getElementById('walletAmnt').textContent = "Wallet Amount:Rs "+ response.walletNew   
+                    }else if(response.success == false){
+                      
+                        Toast.fire({
+                            icon: 'success',
+                            title: "Wallet Amount Applied"
+                        })
+                         
+                        document.getElementById('total').textContent = response.totalFinal
+                     
+                        document.getElementById('discountW').textContent = response.total
+                        document.getElementById("walletdiscnt").value = response.total
+                        document.getElementById('walletAmnt').textContent = "Wallet Amount:Rs " + response.updatedWallet  
+
+                    } else if (response.message1) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: response.message1
+                        })
+                         document.getElementById("use-wallet").checked = false
+                    } else if (response.message2) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: response.message2
+                        })
+                         document.getElementById("use-wallet").checked = false
+                      
+                    }
+                  
+                        
+                }
+            })
+           
+            
+        }
+
+        function useCoupon(ivalue){
+            let coupons = document.getElementById(`couponUse-${ivalue}`)
+            let couponAvailable = coupons.innerHTML
+            
+            let couponInput = document.getElementById("fieldvalue")
+            couponInput.value = couponAvailable
+            console.log(couponInput.value);
+
+        }
+    </script>
+    <%- include('../layouts/footer.ejs') %>

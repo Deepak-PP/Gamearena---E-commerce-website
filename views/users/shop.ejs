@@ -1,0 +1,438 @@
+<%- include('../layouts/header.ejs') %>
+    <!-- Navbar End -->
+
+    <!-- Breadcrumb Start -->
+    <div
+        class="container-fluid d-flex justify-content-end mb-4  "
+        style="padding-right: 1.9375rem">
+        <div class="row px-xl-5">
+            <div class="ml-2">
+                <div class="btn-group">
+                    <button
+                        type="button"
+                        class="btn1 btn1-sm btn1-light dropdown-toggle"
+                        data-toggle="dropdown">Sort By Price</button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#" data-sort-option="low-to-high">Low to High</a>
+                        <a class="dropdown-item" href="#" data-sort-option="high-to-low">High to Low</a>
+
+                    </div>
+
+                </div>
+                <!-- <div class="btn-group ml-2"> <button type="button" class="btn btn-sm
+                btn-light dropdown-toggle" data-toggle="dropdown">Showing</button> <div
+                class="dropdown-menu dropdown-menu-right"> <a class="dropdown-item"
+                href="#">10</a> <a class="dropdown-item" href="#">20</a> <a
+                class="dropdown-item" href="#">30</a> </div> </div> -->
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Shop Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <!-- Shop Sidebar Start -->
+            <div class="col-lg-3 col-md-4">
+                <!-- Price Start -->
+
+                <!-- Price End -->
+
+                <!-- Color Start -->
+
+                <h5 class="section-title position-relative text-uppercase mb-3">
+                    <span class="bg-secondary pr-3">Filter by category</span></h5>
+                <div class="bg-dark text-light p-4 mb-30">
+                    <form>
+                        <div class="form-check">
+                            <input class="form-check-input mx-2 my-2" type="checkbox" id="allCategory" checked="checked" onchange="allcategory()">
+                            <label class="form-check-label" for="allCategory">All categories </span></label>
+                        </div>
+                        <% for(category of categories){ %>
+                            <div class="form-check">
+                                <input class="form-check-input mx-2 my-2 " type="checkbox" value="<%=category.name%>" name="category"
+                                    id="category-<%=category._id%>" onclick="categoryclick(this)">
+                                <label class="form-check-label" for="category-<%=category._id%>">
+                                    <%=category.name%>
+                                </label>
+                            </div>
+                            <% } %>
+                    </form>
+
+                </div>
+
+                <!-- Color End -->
+
+               
+            </div>
+            <!-- Shop Sidebar End -->
+
+            <!-- Shop Product Start -->
+            <div class="col-lg-9 col-md-8 ">
+                <div class="row pb-3" id="sortArea">
+
+                    <!-- <div class="col-lg-9 col-md-8"> <div class="row pb-3" id="sortArea"> <div
+                    class="col-12 pb-1"> <div class="d-flex align-items-center
+                    justify-content-between mb-4"> -->
+
+                    <% if(product_data.length>0){%>
+
+                        <% for(products of product_data) { %>
+                            <div class="col-lg-4 col-md-6 col-sm-6 pb-1" id="products">
+                                <div class="product-item bg-light mb-4">
+                                    <div class="product-img position-relative overflow-hidden">
+
+                                        <img
+                                            style="height: 15rem;"
+                                            class="img-fluid w-100"
+                                            src="/productImages/<%= products.image[0] %>"
+                                            alt="">
+
+                                        <div class="product-action">
+                                            <a
+                                                onclick="addtocart('<%= products._id %>')"
+                                                class="btn btn-outline-dark btn-square">
+                                                <i class="fa fa-shopping-cart"></i>
+                                            </a>
+                                            <a
+                                                class="btn btn-outline-dark btn-square"
+                                                onclick="addtoWishlist('<%= products._id %>')">
+                                                <i class="far fa-heart"></i>
+                                            </a>
+                                           
+                                        </div>
+                                    </div>
+                                    <div class="text-center py-4">
+                                        <a
+                                            class="h6 text-decoration-none text-truncate"
+                                            href="/detail/?id=<%=products._id %>"><%= products.name %></a>
+                                        <div class="d-flex align-items-center justify-content-center mt-2">
+                                            <h5>Rs <%= products.price %></h5>
+                                            <h6 class="text-muted ml-2">
+                                                <del>Rs <%= products.grossprice %></del>
+                                            </h6>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+
+                    <% }else { %>
+                        <tr>
+                            <td colspan="5">Product not found</td>
+
+                        </tr>
+                    <% } %>
+                </div>
+
+                <div class='pagination d-flex justify-content-end'>
+                    <nav aria-label="...">
+                        <ul class="pagination pagination-circle" style="display: inline;">
+                            <% if (currentPage==1) { %>
+                                <li class="page-item disabled" style="display: inline;">
+                                    <a class="page-link">Previous</a>
+                                </li>
+                            <% } else { %>
+                                <li class="page-item" style="display: inline-block;">
+                                    <a class="page-link" href="?page=<%= currentPage - 1%>">Previous</a>
+                                </li>
+                            <% } %>
+                            <% for(let j=1; j <=totalPages; j++) { %>
+                                <% if (j===currentPage) { %>
+                                    <li class="page-item active" aria-current="page" style="display: inline-block;">
+                                        <a class="page-link" href="#" id="page">
+                                            <%= j %>
+                                            <span class="visually-hidden"></span>
+                                        </a>
+                                    </li>
+                                <% } else { %>
+                                    <li class="page-item" style="display: inline-block;">
+                                        <a class="page-link" href="?page=<%= j %>">
+                                            <%= j %>
+                                        </a>
+                                    </li>
+                                <% } %>
+                            <% } %>
+                            <% if (currentPage==totalPages) { %>
+                                <li class="page-item disabled" style="display: inline-block;">
+                                    <a class="page-link">Next</a>
+                                </li>
+                            <% } else { %>
+                                <li class="page-item" style="display: inline-block;">
+                                    <a class="page-link" href="?page=<%= parseInt(currentPage) + 1%>">Next</a>
+                                </li>
+                            <% } %>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- Shop Product End -->
+    </div>
+</div>
+<!-- Shop End -->
+
+<!-- Footer Start -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="sweetalert2.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  function categoryclick(checkbox) {
+        var sortOption = $('.dropdown-item.active').data('sort-option');
+        let categoryIds = []
+        let checkedCheckboxes = document.querySelectorAll('input[name="category"]:checked');
+        if (checkedCheckboxes.length === 0) {
+            $("#allCategory").prop("checked", true);
+            categoryIds.push('all'); // Use 'all' to indicate no category filter
+        } else {
+            for (let i = 0; i < checkedCheckboxes.length; i++) {
+                let categoryId = checkedCheckboxes[i].id.replace("category-", "");
+                categoryIds.push(categoryId);
+            }
+            $("#allCategory").prop("checked", false);
+        }
+        let searchFilter = $('#searchInput').val(); // Retrieve search filter
+        filteredProducts(categoryIds, sortOption, searchFilter);
+    
+    }
+
+    function allcategory() {
+        console.log('here2');
+        let checkboxes = document.getElementsByName("category");
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = false;
+        }
+console.log('here1');
+        $.ajax({
+            url: '/CategoryAll',
+            method: 'get',
+            success: (response) => {
+                let viewarea = document.getElementById('sortArea')
+                let html = ''
+                if (response && response.allproducts) {
+                    let products = response.allproducts;
+                    products.forEach((element) => {
+                        html += `<div class="col-lg-4 col-md-6 col-sm-6 pb-1" id="products">
+                            <div class="product-item bg-light mb-4">
+                                <div class="product-img position-relative overflow-hidden">
+                                    <img style="height: 15rem;" class="img-fluid w-100" src="/productImages/${element.image[0]}" alt="">
+                                    <div class="product-action">
+                                        <a onclick="addtocart('${element._id}')" class="btn btn-outline-dark btn-square"><i class="fa fa-shopping-cart"></i></a>
+                                        <a class="btn btn-outline-dark btn-square" href="/wishlist-add/?id=${element._id}"><i class="far fa-heart"></i></a>
+                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <div class="text-center py-4">
+                                    <a class="h6 text-decoration-none text-truncate" href="/detail/?id=${element._id}">${element.name}</a>
+                                    <div class="d-flex align-items-center justify-content-center mt-2">
+                                        <h5>${element.price}</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-center mb-1">
+                                        <small class="fa fa-star text-primary mr-1"></small>
+                                        <small class="fa fa-star text-primary mr-1"></small>
+                                        <small class="fa fa-star text-primary mr-1"></small>
+                                        <small class="fa fa-star text-primary mr-1"></small>
+                                        <small class="fa fa-star text-primary mr-1"></small>
+                                        <small>(99)</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                    });
+                    viewarea.innerHTML = html;
+                } else {
+                    viewarea.innerHTML = "<p>No products found for this category</p>";
+                }
+                error : (error) => {
+                    console.log(error);
+                }
+
+            }
+        })
+    }
+
+   $('.dropdown-item').on('click', function (e) {
+        e.preventDefault();
+        var sortOption = $(this).data('sort-option');
+        let categoryIds = []
+        let checkedCheckboxes = document.querySelectorAll('input[name="category"]:checked');
+        if (checkedCheckboxes.length === 0) {
+            categoryIds.push('all'); // Use 'all' to indicate no category filter
+        } else {
+            for (let i = 0; i < checkedCheckboxes.length; i++) {
+                let categoryId = checkedCheckboxes[i].id.replace("category-", "");
+                categoryIds.push(categoryId);
+            }
+        }
+        let searchFilter = $('#searchInput').val(); // Retrieve search filter
+        filteredProducts(categoryIds, sortOption, searchFilter);
+    });
+
+
+    function addtocart(proId) {
+        event.preventDefault()
+        $.ajax({
+            url: `/add-cart/${proId}`,
+            method: "get",
+            success: function (response) {
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+                if (response.success == true) {
+                    Toast.fire({icon: 'success', title: "Item added to cart"})
+                     setTimeout(() => {
+                         window.location.href = "/shop"
+                        
+                    }, 3000);
+                } else if (response.success == false) {
+                    Toast.fire({icon: 'error', title: "Product is out of stock"})
+                } else if (response.message) {
+                    Toast.fire({icon: 'success', title: "Product added again"})
+                     setTimeout(() => {
+                        window.location.href = "/shop"
+
+                    }, 3000);
+
+                }
+
+            }
+        })
+
+    }
+
+    function searchProduct() {
+        const search = document
+            .getElementById("search_input")
+            .value;
+        console.log(search);
+         var sortOption = $(this).data('sort-option');
+          let categoryIds = []
+        let checkedCheckboxes = document.querySelectorAll('input[name="category"]:checked');
+        if (checkedCheckboxes.length === 0) {
+            categoryIds.push('all'); // Use 'all' to indicate no category filter
+        } else {
+            for (let i = 0; i < checkedCheckboxes.length; i++) {
+                let categoryId = checkedCheckboxes[i].id.replace("category-", "");
+                categoryIds.push(categoryId);
+            }
+        }
+         filteredProducts(categoryIds, sortOption, search);
+
+    }
+
+    function addtoWishlist(proId){
+         event.preventDefault()
+        $.ajax({
+            url: `/add-wishlist/${proId}`,
+            method: "get",
+            success: function (response) {
+                  const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+                 if (response.success == true) {
+                    Toast.fire({ icon: 'success', title: "Item added to Wishllist" })
+                    setTimeout(() => {
+                        window.location.href = "/shop"
+
+                    }, 3000);
+                } else if (response.message1) {
+                    Toast.fire({ icon: 'success', title: response.message1 })
+                    setTimeout(() => {
+                        window.location.href = "/shop"
+
+                    }, 3000);
+
+                } else if (response.message2) {
+                     Toast.fire({ icon: 'error', title: response.message2 })
+                     setTimeout(() => {
+                         window.location.href = "/shop"
+
+                     }, 3000);
+
+                 }
+
+            }})
+
+    }
+
+
+
+    function filteredProducts( categoryIds, sortOption, search){
+        console.log(sortOption,'this is sortoption');
+        console.log(categoryIds, sortOption, 'this is category34578345783478');
+        $.ajax({
+            url:'/filterProducts',
+            method:'post',
+            data:{ categoryIds, sortOption, search },
+            success:function(response){
+                if(response.sortedproducts){
+                displayProducts(response.sortedproducts)
+                }
+            }
+        })
+
+
+
+    }
+    
+    function displayProducts(products){
+        let viewarea = document.getElementById('sortArea')
+        let html = ''
+        if (products) {
+            
+            products.forEach((element) => {
+                html += `<div class="col-lg-4 col-md-6 col-sm-6 pb-1" id="products">
+                            <div class="product-item bg-light mb-4">
+                                <div class="product-img position-relative overflow-hidden">
+                                    <img style="height: 15rem;" class="img-fluid w-100" src="/productImages/${element.image[0]}" alt="">
+                                    <div class="product-action">
+                                        <a onclick="addtocart('${element._id}')" class="btn btn-outline-dark btn-square" ><i class="fa fa-shopping-cart"></i></a>
+                                        <a class="btn btn-outline-dark btn-square" href="/wishlist-add/?id=${element._id}"><i class="far fa-heart"></i></a>
+                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <div class="text-center py-4">
+                                    <a class="h6 text-decoration-none text-truncate" href="/detail/?id=${element._id}">${element.name}</a>
+                                    <div class="d-flex align-items-center justify-content-center mt-2">
+                                        <h5>${element.price}</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-center mb-1">
+                                        <small class="fa fa-star text-primary mr-1"></small>
+                                        <small class="fa fa-star text-primary mr-1"></small>
+                                        <small class="fa fa-star text-primary mr-1"></small>
+                                        <small class="fa fa-star text-primary mr-1"></small>
+                                        <small class="fa fa-star text-primary mr-1"></small>
+                                        <small>(99)</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+            });
+            viewarea.innerHTML = html;
+        } else {
+            viewarea.innerHTML = "<p>No products found for this category</p>";
+        }
+    }
+</script>
+<%- include('../layouts/footer.ejs') %>

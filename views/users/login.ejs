@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/loginstyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    
+
+  <section class=" gradient-custom vh-100" style="background-image: url(https://images.pexels.com/photos/1038916/pexels-photo-1038916.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1); background-size: cover;" >
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-end" >
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card bg-dark text-white" style="border-radius: 1rem;background: #F5F5F5;
+            mix-blend-mode: lighten;
+            border: 1px solid #524a4a;
+            box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);">
+              <div class="card-body text-center mt-1">
+    
+                <div class="mb-md- mt-md-1 pb-5 pt-5">
+    
+                  <h2 class="fw-bold text-uppercase">Login</h2>
+                  <p class="text-white-50 mb-5">Please enter your login and password!</p>
+  
+                  <form action="/login" method="POST">
+                    <% if(typeof message !== 'undefined'){
+                        %>
+                        <p style="color: rgb(255, 0, 0); "><%= message %></p>
+                   <% } %>
+    
+                  <div class="form-outline form-white mb-4 text-white">
+                    <input type="email" name="email" placeholder="Enter your email" required id="typeEmailX" class="form-control form-control-lg " />
+                    <!-- <label class="form-label " for="typeEmailX"></label> -->
+                  </div><br>
+    
+                  <div class="form-outline form-white mb-4">
+                    <input  type="password" name="password" placeholder="Enter your password" required id="typePasswordX" class="form-control form-control-lg" />
+                    <!-- <label class="form-label" for="typePasswordX">Password</label> -->
+                  </div><br>
+  
+                  <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+                 
+              </form>
+
+              <p>
+                <form action="/otpenter">
+                  
+               
+             <button class="bg-danger py-2" style="border-radius: 1rem;" type="submit" >
+                 Sign in with otp
+             </button>
+         </form>
+         </p>
+    
+                  <div class="d-flex justify-content-center text-center  pt-1">
+                    <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
+                    <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
+                    <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
+                  </div>
+    
+                </div>
+    
+                <div>
+                  <p class="mb-0"><a href="/forget" class="text-white-50 fw-bold">Forgot password?</a></p>
+                  <p class="mb-0">Don't have an account? <a href="/register" class="text-white-50 fw-bold">Sign Up</a>
+                  </p>
+                </div>
+    
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+</body>
+</html>

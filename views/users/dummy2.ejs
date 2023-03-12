@@ -1,0 +1,40 @@
+<div class='pagination d-flex justify-content-end'>
+    <nav aria-label="...">
+        <ul class="pagination pagination-circle" style="display: inline;">
+            <% if (currentPage==1) { %>
+                <li class="page-item disabled" style="display: inline;">
+                    <a class="page-link">Previous</a>
+                </li>
+                <% } else { %>
+                    <li class="page-item" style="display: inline-block;">
+                        <a class="page-link" href="?page=<%= currentPage - 1%>">Previous</a>
+                    </li>
+                    <% } %>
+                        <% for(let j=1; j <=totalPages; j++) { %>
+                            <% if (j===currentPage) { %>
+                                <li class="page-item active" aria-current="page" style="display: inline-block;">
+                                    <a class="page-link" href="#" id="page">
+                                        <%= j %> <span class="visually-hidden"></span>
+                                    </a>
+                                </li>
+                                <% } else { %>
+                                    <li class="page-item" style="display: inline-block;">
+                                        <a class="page-link" href="?page=<%= j %>">
+                                            <%= j %>
+                                        </a>
+                                    </li>
+                                    <% } %>
+                                        <% } %>
+                                            <% if (currentPage==totalPages) { %>
+                                                <li class="page-item disabled" style="display: inline-block;">
+                                                    <a class="page-link">Next</a>
+                                                </li>
+                                                <% } else { %>
+                                                    <li class="page-item" style="display: inline-block;">
+                                                        <a class="page-link"
+                                                            href="?page=<%= parseInt(currentPage) + 1%>">Next</a>
+                                                    </li>
+                                                    <% } %>
+        </ul>
+    </nav>
+</div>

@@ -1,0 +1,265 @@
+<%- include('../layouts/header.ejs') %>
+    <!-- Navbar End -->
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="#">Home</a>
+                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                    <span class="breadcrumb-item active">Shopping Cart</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Cart Start -->
+    <div class="container-fluid">
+        <% if(user_in){ %>
+
+            <div class="row px-xl-5 ">
+                <div class="col-lg-8 table-responsive mb-5 ">
+
+                    <table class="table table-dark table-borderless table-hover text-center mb-0">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Products</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody class="align-middle bg-dark">
+
+                            <% if(cartproducts.length>0){
+                                for(let i=0;i<cartproducts.length;i++) { %>
+                                <tr>
+                                    <td class="align-middle"><img
+                                        src="/productImages/<%= cartproducts[i].image[0] %>"
+                                        alt=""
+                                        style="width: 50px;">
+                                        <%= cartproducts[i].name %>
+                                    </td>
+                                    <td class="align-middle">
+                                       Rs <%= cartproducts[i].price %>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="input-group quantity mx-auto" style="width: 100px;">
+                                            <div class="input-group-btn">
+                                                <button
+                                                    onclick="decrement('<%=cartproducts[i]._id%>')"
+                                                    class="btn btn-sm btn-primary btn-minus">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                            </div>
+                                            <input
+                                                type="hidden"
+                                                id="stock-<%=cartproducts[i]._id%>"
+                                                value="<%=cartproducts[i].in_stock%>">
+                                            <input
+                                                id="<%=cartproducts[i]._id%>"
+                                                type="text"
+                                                class="form-control form-control-sm bg-secondary border-0 text-center"
+                                                value="<%= value[i].quantity %>">
+                                            <div class="input-group-btn">
+                                                <button
+                                                    onclick="increment('<%=cartproducts[i]._id%>','<%=cartproducts[i].in_stock%>')"
+                                                    class="btn btn-sm btn-primary btn-plus">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td id="total-<%=cartproducts[i]._id%>" class="align-middle">
+                                       Rs <%= value[i].pricetotal %>
+                                    </td>
+                                    <td class="align-middle">
+                                        <a href="/delete-item/?id=<%= value[i].item %>">
+                                            <button class="btn btn-sm btn-danger">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            <% } %>
+                        <%}else { %>
+                            <tr>
+                                <td colspan="5">No items in your cart</td>
+                            </tr>
+                        <% } %>
+
+                    </tbody>
+
+                    <a href="/cart-update">
+                        <button class="btn btn-primary">Update cart</button>
+                    </a>
+                </table>
+            </div>
+            <div class="col-lg-4">
+
+                <h5 class="section-title position-relative text-uppercase mb-3">
+                    <span class="bg-secondary pr-3">Cart Summary</span></h5>
+                <div class="bg-light p-30 mb-5">
+                    <div class="border-bottom pb-2">
+                        <div class="d-flex justify-content-between mb-3">
+                            <% let prices=0; %>
+                                <% for(let j=0;j<cartproducts.length;j++) { %>
+                                    <% prices +=value[j].pricetotal; %><% } %>
+                                    <h6 >Subtotal
+                                    </h6>
+                                    <h6 id="subtotal">Rs <%= prices %></h6>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="font-weight-medium"></h6>
+                                    <h6 class="font-weight-medium"></h6>
+                                </div>
+                            </div>
+                            <div class="pt-2">
+                                <div class="d-flex justify-content-between mt-2">
+                                    <% let price=0; %>
+                                        <% for(let j=0;j<cartproducts.length;j++) { %>
+                                            <% price +=value[j].pricetotal; %><% } %>
+                                            <h5>Total
+                                            </h5>
+                                            <h5 id="total">Rs <%= price %></h5>
+
+                                        </div>
+                                        <a
+                                            href="<% if (cartproducts.every(product => product.in_stock > 0)) { %>/checkout<% } else { %>#<% } %>">
+                                            <button
+                                                class="btn btn-block btn-primary font-weight-bold my-3 py-3 <% if (!cartproducts.every(product => product.in_stock > 0)) { %>disabled<% } %>">
+                                                Proceed To Checkout
+                                            </button>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <% } 
+       else{ %>
+
+                        <a href="/login">
+                            <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Please Sign In to continue</button>
+                        </a>
+                        <div class="row px-xl-5 justify-content-center"></div>
+
+                    <% } %>
+
+                </div>
+
+                <!-- Cart End -->
+
+                <!-- Footer Start -->
+
+                <script>
+                    // add event listeners to all increment and decrement buttons
+                    const decrementButtons = document.querySelectorAll('.btn-minus');
+                    const incrementButtons = document.querySelectorAll('.btn-plus');
+
+                    decrementButtons.forEach(button => {
+                        button.addEventListener('click', () => {
+                            const input = button
+                                .parentNode
+                                .parentNode
+                                .querySelector('input[type="text"]');
+                            const value = parseInt(input.value);
+                            if (value > 1) {
+                                input.value = value - 1;
+                            }
+                        });
+                    });
+
+                    incrementButtons.forEach(button => {
+                        button.addEventListener('click', () => {
+                            const input = button
+                                .parentNode
+                                .parentNode
+                                .querySelector('input[type="text"]');
+                            const stocks = button
+                                .parentNode
+                                .parentNode
+                                .querySelector('input[type="hidden"]');
+                            let stock = parseInt(stocks.value)
+                            const value = parseInt(input.value)
+                            if (value < stock) {
+                                input.value = value + 1;
+                            }
+
+                        });
+                    });
+
+                    function increment(cartquant, instock) {
+
+                        $.ajax({
+                            url: '/carts',
+                            method: 'get',
+                            data: ({proId: cartquant, stock: instock}),
+                            success: function (response) {
+                                if (response.success == true) {
+                                    document
+                                        .getElementById(`total-${cartquant}`)
+                                        .textContent = response
+                                        .updatedPrice
+                                        document
+                                        .getElementById('subtotal')
+                                        .textContent = response
+                                        .sum
+                                        document
+                                        .getElementById('total')
+                                        .textContent = response.sum
+                                } else if (response.success == false) {
+                                    alert("product out of Stock")
+                                    document
+                                        .getElementById(`total-${cartquant}`)
+                                        .textContent = response
+                                        .updatedPrice
+                                        document
+                                        .getElementById('subtotal')
+                                        .textContent = response
+                                        .sum
+                                        document
+                                        .getElementById('total')
+                                        .textContent = response.sum
+
+                                }
+
+                            }
+                        })
+                    }
+
+                    function decrement(cartquant) {
+
+                        let presentquantity = document.getElementById(cartquant)
+                        if (presentquantity.value > 1) {
+                            $.ajax({
+                                url: `cart/${cartquant}`,
+                                method: 'post',
+                                success: function (response) {
+                                    document
+                                        .getElementById(`total-${cartquant}`)
+                                        .textContent = response
+                                        .updatedPrice
+                                        document
+                                        .getElementById('subtotal')
+                                        .textContent = response
+                                        .sum
+                                        document
+                                        .getElementById('total')
+                                        .textContent = response.sum
+
+                                }
+                            })
+
+                        } else {
+                            alert('Limit Reached')
+                        }
+                    }
+                </script>
+
+                <%- include('../layouts/footer.ejs') %>

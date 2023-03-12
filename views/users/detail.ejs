@@ -1,0 +1,295 @@
+<%- include('../layouts/header.ejs') %>
+    <!-- Navbar End -->
+
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="#">Home</a>
+                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                    <span class="breadcrumb-item active">Shop Detail</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Shop Detail Start -->
+    <div class="container-fluid pb-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-5 mb-30">
+            <div class="mb-3">
+                <a href="/productImages/<%=products.image[0] %>" class="MagicZoom" id="motorbike"
+                    data-options="selectorTrigger: hover; transitionEffect: false;zoomMode: magnifier; variableZoom: true">
+                    <img src="/productImages/<%=products.image[0] %>">
+                </a>
+            </div>
+            <div class="d-flex">
+                <div class="mr-3">
+                    <a data-zoom-id="motorbike" href="/productImages/<%=products.image[0] %>"
+                        data-image="motorbike2-small.jpg">
+                        <img src="/productImages/<%=products.image[0] %>" style="max-width: 100px;">
+                    </a>
+                </div>
+                <div class="mr-3">
+                    <a data-zoom-id="motorbike" href="/productImages/<%=products.image[1] %>" data-image="motorbike2-small.jpg">
+                        <img src="/productImages/<%=products.image[1] %>" style="max-width: 100px;">
+                    </a>
+                </div>
+                <div class="mr-3">
+                    <a data-zoom-id="motorbike" href="/productImages/<%=products.image[2] %>"
+                        data-image="motorbike3-small.jpg">
+                        <img src="/productImages/<%=products.image[2] %>" style="max-width: 100px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7 h-auto mb-30">
+            <div class="h-100 bg-dark text-white p-30">
+                <h3 class="text-light">
+                    <%=products.name %>
+                </h3>
+                <div class="d-flex mb-3"></div>
+                <h3 class="font-weight-semi-bold mb-4 text-light">Rs.<%=products.price %>
+                </h3>
+                <div class="mb-3">
+                    <h5 id="productId" class="text-light mr-3 mb-5" style="display: none;">
+                        <%= products._id %>
+                    </h5>
+                    <h5 class="text-light mr-3">colour:<%=products.colour %>
+                    </h5>
+                    <h5 class="text-light mr-3">Processor:<%=products.processor %>
+                    </h5>
+                    <h5 class="text-light mr-3 mb-5">HDD:<%=products.hdd %>
+                    </h5>
+                    <h5 class="text-light mr-3">Description</h5>
+                    <p class="mb-4">
+                        <%=products.description %>
+                    </p>
+                </div>
+                <div class="d-flex mb-4">
+                    <h2 class="text-dark mr-3"></h2>
+                </div>
+                <div class="d-flex align-items-center mb-4 pt-2">
+                    <a href="/add-cart/?id=<%= products._id %>">
+                        <button class="btn btn-primary px-3">
+                            <i class="fa fa-shopping-cart mr-1"></i> Add To Cart
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="row px-xl-5">
+            <div class="col">
+                <div class="bg-light p-30">
+                    <div class="nav nav-tabs mb-4">
+                  
+                        <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Reviews (0)</a>
+                    </div>
+                    <div class="">
+                        
+                            
+                        <div class="" >
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4 class="mb-4"><%=products.reviews.length%> review for <%=products.name%></h4>
+                                   <% for(let i=0;i<products.reviews.length;i++){ %>
+
+                                    <div class="media mb-4">
+                                        <i class="fa-regular fa-circle-user"></i>
+                                        <div class="media-body">
+                                            <h6><%=products.reviews[i].user%></h6>
+                                           <% if(products.reviews[i].rating == 1){ %>
+                                            <div class="text-primary mb-2">
+                                                <i class="fas fa-star"></i>
+                                               
+                                            </div>
+
+                                           <% }else if(products.reviews[i].rating == 2){ %>
+                                            <div class="text-primary mb-2">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            
+                                            </div>
+
+                                        <% }else if(products.reviews[i].rating==3){ %>
+                                            <div class="text-primary mb-2">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            
+                                            </div>
+
+
+                                            <% }else if(products.reviews[i].rating==4){ %>
+                                                <div class="text-primary mb-2">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                
+                                                </div>
+
+
+                                                <% }else if(products.reviews[i].rating==5){ %>
+                                                    <div class="text-primary mb-2">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                    
+                                                    </div>
+                                                    <% } %>
+
+                                           
+                                            <p><%=products.reviews[i].text%></p>
+                                        </div>
+                                    </div>
+
+                                   <% } %>
+                                    
+                                </div>
+                                <div class="col-md-6">
+                                    <h4 class="mb-4">Leave a review</h4>
+                                    <small>Your email address will not be published. Required fields are marked *</small>
+                                    <div class="d-flex my-3">
+                                        <label for="star-rating">Your Rating * :</label>
+                                        <select id="star-rating" name="star-rating">
+                                            <option value="1">1 Star</option>
+                                            <option value="2">2 Stars</option>
+                                            <option value="3">3 Stars</option>
+                                            <option value="4">4 Stars</option>
+                                            <option value="5">5 Stars</option>
+                                        </select>
+                                    </div>
+
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="message">Your Review *</label>
+                                            <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name">Your Name *</label>
+                                            <input type="text" class="form-control" id="name">
+                                        </div>
+                                        
+                                        <div class="form-group mb-0">
+                                            <a onclick="reviewSubmit()" class="btn btn-primary px-3">Leave Your Review</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+        $(function hoverimg() {
+          $('.product-image').on('mouseover', function() {
+            var $img = $(this).find('img'),
+                originalSrc = $img.data('original'),
+                zoomImg = '<div class="zoom-image"><img src="' + originalSrc + '"></div>';
+        
+            $(this).append(zoomImg);
+        
+            $('.zoom-image').zoomooz({
+              animate: true,
+              scale: 2,
+              duration: 200,
+              closeOnClick: true,
+              onOpen: function() {
+                $(this).find('.close-button').on('click', function() {
+                  $('.zoom-image').remove();
+                });
+              },
+              onClose: function() {
+                $('.zoom-image').remove();
+              }
+            });
+          }).on('mouseleave', function() {
+            $('.zoom-image').remove();
+          });
+        });
+
+
+        function reviewSubmit(){
+            console.log("herererer");
+           const select = document.querySelector('#star-rating');
+            const ratingDisplay = document.querySelector('.text-primary');
+
+            select.addEventListener('change', () => {
+                const rating = select.value;
+                ratingDisplay.innerHTML = '';
+
+                for (let i = 0; i < rating; i++) {
+                    const star = document.createElement('i');
+                    star.classList.add('fas', 'fa-star');
+                    ratingDisplay.appendChild(star);
+                }
+
+                for (let i = rating; i < 5; i++) {
+                    const star = document.createElement('i');
+                    star.classList.add('far', 'fa-star');
+                    ratingDisplay.appendChild(star);
+                }
+                   
+            });
+            let rating = select.value
+            let content1 = document.getElementById('message')
+            let name1 = document.getElementById('name')
+            let content = content1.value
+            let name = name1.value
+            let productId1 = document.getElementById('productId')
+            let productId = productId1.innerHTML
+            $.ajax({
+                url:'/productReview',
+                method:"post",
+                data:{ rating , content , name, productId },
+                success:function(response){
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+                    if (response.success == true) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: "Thankyou for your feedback"
+                        })
+                    }
+
+                }
+            })
+                
+
+        }
+        
+        </script>
+    <!-- Shop Detail End -->
+
+
+    <!-- Products Start -->
+   
+    <!-- Products End -->
+
+
+    <!-- Footer Start -->
+    <%- include('../layouts/footer.ejs') %>

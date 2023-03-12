@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Login Page - Product Admin Template</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:400,700"
+    />
+    <!-- https://fonts.google.com/specimen/Open+Sans -->
+    <link rel="stylesheet" href="/fontawesome.min.css" />
+    <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="/bootstrap.min.css" />
+    <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="/templatemo-style.css">
+    <!--
+	Product Admin CSS Template
+	https://templatemo.com/tm-524-product-admin
+	-->
+  </head>
+
+  <body  style="background-image: url(https://images.pexels.com/photos/1069798/pexels-photo-1069798.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1); background-size: cover;"></body>>
+    
+
+    <div class="container tm-mt-big tm-mb-big">
+      <div class="row py-5">
+        <div class="col-12 mx-auto tm-login-col">
+          <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+            <div class="row">
+              <div class="col-12 text-center">
+                <h2 class="tm-block-title mb-4">Welcome Admin</h2>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-12">
+                <% if(typeof message !== 'undefined'){
+                  %>
+                  <p style="color: rgb(173, 0, 0);"><%= message %></p>
+             <% } %>
+                <form action="/admin/loginadmin" method="POST" class="tm-login-form">
+                  
+                  <div class="form-group mt-3">
+                    <label for="email">Email</label>
+                    <input
+                      name="email"
+                      type="email"
+                      class="form-control validate"
+                      id="password"
+                      value=""
+                      required
+                    />
+                  </div>
+                  <div class="form-group mt-3">
+                    <label for="password">Password</label>
+                    <input
+                      name="password"
+                      type="password"
+                      class="form-control validate"
+                      id="password"
+                      value=""
+                      required
+                    />
+                  </div>
+                  <div class="form-group mt-4">
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-block text-uppercase"
+                    >
+                      Login
+                    </button>
+                  </div>
+             
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <!-- https://jquery.com/download/ -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="https://kit.fontawesome.com/d4801b7ff5.js" crossorigin="anonymous"></script>
+    <!-- https://getbootstrap.com/ -->
+  </body>
+</html>

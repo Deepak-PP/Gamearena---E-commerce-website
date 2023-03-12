@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/registerstyle.css">
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+            crossorigin="anonymous">
+        <title>Gamearena</title>
+    </head>
+    <body>
+
+        <div class="container-fluid ps-md-0">
+            <div class="row g-0">
+                <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+                <div class="col-md-8 col-lg-6">
+                    <div class="login d-flex align-items-center py-5">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-9 col-lg-8 mx-auto">
+                                    <h3 class="login-heading mb-4">SIGNUP</h3><br>
+
+                                    <!-- Sign In Form -->
+                                    <form action="/register" method="POST" onsubmit="return a()">
+                                        <% if(typeof message2 !== 'undefined'){
+                        %>
+                                            <p style="color: darkgreen;"><%= message2 %></p>
+                                        <% } %>
+                                        <div class="form-floating mb-3">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="floatingInput"
+                                                name="name"
+                                                placeholder="Username"
+                                                required="required">
+                                            <label for="floatingInput">Your Name</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input
+                                                type="email"
+                                                class="form-control"
+                                                id="em1"
+                                                name="email"
+                                                placeholder="Email">
+                                            <label for="floatingPassword">Your E-Mail</label>
+                                            <p id="message2" style="color: crimson;"></p>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="psw1"
+                                                name="password"
+                                                placeholder=" Enter your password">
+                                            <label for="floatingPassword">Enter the password</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input
+                                                type="password"
+                                                class="form-control"
+                                                id="psw2"
+                                                name="password2"
+                                                placeholder="confirm password">
+                                            <label for="floatingPassword">confirm your password
+
+                                            </label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="floatingPassword"
+                                                name="mobile"
+                                                placeholder="Mobile number">
+                                            <label for="floatingPassword">Enter your mobile number
+
+                                            </label>
+                                        </div>
+
+                                        <!-- <div class="form-check mb-3"> <input class="form-check-input"
+                                        type="checkbox" value="" id="rememberPasswordCheck"> <label
+                                        class="form-check-label" for="rememberPasswordCheck"> Remember password </label>
+                                        </div> -->
+
+                                        <div class="d-grid">
+                                            <button
+                                                onclick="checkpsw()"
+                                                class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2"
+                                                type="submit">Sign Up
+                                            </button>
+
+                                            <br>
+                                            <p id="message" style="color: crimson;"></p>
+
+                                            <div class="text-center">
+                                                <a>Already have account?-</a>
+                                                <a class="small" href="/login">Login</a>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+
+            function checkpsw() {
+
+                let password = document
+                    .getElementById('psw1')
+                    .value
+                let confirmpassword = document
+                    .getElementById('psw2')
+                    .value
+                let message = document.getElementById('message')
+                if (password != confirmpassword) {
+                    message.textContent = "Passwords do not match"
+                } else if (password.length < 5) {
+                    message.textContent = "Passwords should have atleast five characters"
+                }
+
+            }
+
+            function a() {
+                const regex_pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$/;
+                let password = document
+                    .getElementById('psw1')
+                    .value
+                let confirmpassword = document
+                    .getElementById('psw2')
+                    .value
+                let email = document
+                    .getElementById('em1')
+                    .value
+                let message1 = document.getElementById('message2')
+                if (password === confirmpassword && password.length > 5 && regex_pattern.test(email)) {
+                    return true
+
+                } else {
+                    message1.textContent = "E-mail not valid"
+                    return false
+                }
+            }
+        </script>
+
+    </body>
+</html>
