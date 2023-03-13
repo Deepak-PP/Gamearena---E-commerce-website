@@ -170,7 +170,7 @@
                     <% for(let i=0;i<products.image.length;i++){ %>
                       <div class="image-container">
                         <img style="height: 7rem;width: 7rem;" id="first" src="/productImages/<%= products.image[i] %>">
-                        <a onclick="deleteImage('<%= products.image[i] %>','<%= products._id %>')" class="btn-close">X</a>
+                        <a onclick="deleteImage('<%= products.image[i] %>')" class="btn-close">X</a>
                       </div>
                       <% } %>
                   </div>
@@ -229,15 +229,15 @@
     reader.readAsDataURL(file);
   })
 
-  function deleteImage(image,id){
+  function deleteImage(image){
     console.log('here');
    
     
-        console.log(image,id,'filename');
+        console.log(image,'filename');
         $.ajax({
           url: '/admin/deleteImage',
-          type: "get",
-          data :{ image , id },
+          type: "post",
+          data :{ image  },
           success: function (response) {
             if(response.status == true){
               alert('image removed')

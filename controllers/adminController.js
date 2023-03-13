@@ -16,7 +16,7 @@ const path = require('path');
 const {log} = require('console');
 const {match} = require('assert');
 
-const loadDash = async (req, res) => {
+const loadDash = async (req,res,next) => {
     try {
         const orderData = await Order
             .find({})
@@ -113,24 +113,26 @@ const loadDash = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const loadcustomers = async (req, res) => {
+const loadcustomers = async (req,res,next) => {
     try {
 
         const userData = await User.find({__v: 0})
         res.render('customers', {users: userData})
 
     } catch (error) {
-        console.log(error.message)
+        next(error)
+console.log(error.message)
 
     }
 }
 
-const userViewLoad = async (req, res) => {
+const userViewLoad = async (req,res,next) => {
     try {
         const id = req.query.id;
         const userData = await User.findById({_id: id})
@@ -141,22 +143,24 @@ const userViewLoad = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const adminLogin = async (req, res) => {
+const adminLogin = async (req,res,next) => {
     try {
         res.render('loginadmin')
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const logoutAdmin = async (req, res) => {
+const logoutAdmin = async (req,res,next) => {
     try {
         req
             .session
@@ -164,12 +168,13 @@ const logoutAdmin = async (req, res) => {
         res.redirect('/admin/loginadmin')
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const verifyAdmin = async (req, res) => {
+const verifyAdmin = async (req,res,next) => {
     try {
 
         let password = req.body.password
@@ -198,22 +203,24 @@ const verifyAdmin = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const accountsLoad = async (req, res) => {
+const accountsLoad = async (req,res,next) => {
     try {
         res.render('accounts')
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const blockUser = async (req, res) => {
+const blockUser = async (req,res,next) => {
     try {
         const userData = await User.findById({_id: req.query.id})
         // const email = userData.email console.log(userData);
@@ -240,23 +247,25 @@ const blockUser = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const loadcategories = async (req, res) => {
+const loadcategories = async (req,res,next) => {
     try {
         const categoryData = await Category.find({active:true})
         res.render('categories', {category: categoryData})
 
     } catch (error) {
-        console.log(error.message)
+        next(error)
+console.log(error.message)
 
     }
 }
 
-const loadorders = async (req, res) => {
+const loadorders = async (req,res,next) => {
     try {
         const orderData = await Order
             .find({})
@@ -266,11 +275,12 @@ const loadorders = async (req, res) => {
         console.log(orderData, 'dfgsdjsgdjsdf');
         res.render('orders', {orders: orderData})
     } catch (error) {
-        console.log(error.message)
+        next(error)
+console.log(error.message)
     }
 }
 
-const getOrderUpdate = async (req, res) => {
+const getOrderUpdate = async (req,res,next) => {
     try {
         const id = req.query.id;
         const orderData = await Order
@@ -283,11 +293,12 @@ const getOrderUpdate = async (req, res) => {
 
         res.render('updateorder', {orderData, address});
     } catch (error) {
-        console.log(error.message)
+        next(error)
+console.log(error.message)
     }
 }
 
-const updateOrder = async (req, res) => {
+const updateOrder = async (req,res,next) => {
     try {
         const orderData = await Order.findById({_id: req.body.id})
         const updatedData = await Order.findByIdAndUpdate({
@@ -303,23 +314,25 @@ const updateOrder = async (req, res) => {
 
         res.redirect('/admin/orders')
     } catch (error) {
-        console.log(error.message)
+        next(error)
+console.log(error.message)
     }
 }
 
-const loadcoupon = async (req, res) => {
+const loadcoupon = async (req,res,next) => {
     try {
 
         const coupons = await Coupon.find({})
         res.render('coupon', {coupons})
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const Addcoupon = async (req, res) => {
+const Addcoupon = async (req,res,next) => {
     try {
         const newcoupon = new Coupon(
             {couponcode: req.body.code, discount: req.body.discount, maxlimit: req.body.maxamount, minpurchase: req.body.minamount}
@@ -328,12 +341,13 @@ const Addcoupon = async (req, res) => {
         res.redirect('/admin/coupon')
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const getSales = async (req, res) => {
+const getSales = async (req,res,next) => {
     try {
         // const startDate = req.query.start_date const endDate = req.query.end_date
         const orderData = await Order
@@ -352,12 +366,13 @@ const getSales = async (req, res) => {
         res.render("sales", {orderData, addressData});
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const showReport = async (req, res) => {
+const showReport = async (req,res,next) => {
     try {
         let startDate = new Date(req.body.startDate)
         let endDate = new Date(req.body.endDate)
@@ -386,12 +401,13 @@ const showReport = async (req, res) => {
         res.json({salesData, addressData, totalSales});
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const exportData = async (req, res) => {
+const exportData = async (req,res,next) => {
     try {
         let startDate = new Date(req.query.startDate);
         let endDate = new Date(req.query.endDate);
@@ -444,26 +460,27 @@ const exportData = async (req, res) => {
         );
         stream.pipe(res);
     } catch (error) {
-        console.log(error.message);
+        next(error);
         res
             .status(500)
             .send("Internal server error");
     }
 }
 
-const loadBanner = async (req, res) => {
+const loadBanner = async (req,res,next) => {
     try {
         const banners = await Banner.find({})
 
         res.render("banner", {banners});
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const saveBanner = async (req, res) => {
+const saveBanner = async (req,res,next) => {
     try {
         const newBanner = req.body.name;
         console.log(req.body.description, 'dscrptinnnnnnn');
@@ -494,12 +511,13 @@ const saveBanner = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const exportCsv = async (req, res) => {
+const exportCsv = async (req,res,next) => {
     try {
        const startDate = new Date(req.query.startDate);
        const endDate = new Date(req.query.endDate);
@@ -565,24 +583,26 @@ const exportCsv = async (req, res) => {
          res.send(csvString);
        });
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
         res
             .status(500)
             .send("Internal server error");
     }
 };
 
-const loadAddbanner = async (req, res) => {
+const loadAddbanner = async (req,res,next) => {
     try {
         res.render("addBanner")
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const bannerDelete = async (req, res) => {
+const bannerDelete = async (req,res,next) => {
     try {
         let id = req
             .query
@@ -591,7 +611,8 @@ const bannerDelete = async (req, res) => {
             .findByIdAndDelete({_id: id})
         res.redirect('/banner')
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
     }
 }
 

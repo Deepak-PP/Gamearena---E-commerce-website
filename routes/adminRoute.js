@@ -38,7 +38,7 @@ admin_route.get('/edit-product',auth.isLogin,productController.editProductLoad)
 
 admin_route.post("/edit-product", upload.array('image', 6), productController.updateProduct);
 
-admin_route.get( "/deleteImage",auth.isLogin,productController.deleteProductImage);
+admin_route.post( "/deleteImage",auth.isLogin,productController.deleteProductImage);
 
 admin_route.get('/blockornot',auth.isLogin,adminController.blockUser)  
 

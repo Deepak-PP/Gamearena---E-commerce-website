@@ -51,6 +51,7 @@ const securePassword = async (password) => {
         return passwordHash;
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
@@ -69,20 +70,20 @@ const createOrder = async (amount) => {
     return order;
 };
 
-const loadrazor = async (req, res) => {
+const loadrazor = async (req, res,next) => {
     try {
         const {amount} = req.body;
         const order = await createOrder(amount);
         res.json({orderId: order.id});
     } catch (error) {
+        next(error)
         console.log(error.message);
-        res
-            .status(500)
-            .json({message: "Error generating order ID"});
+next(error);
+      
     }
 };
 
-const postrazor = async (req, res) => {
+const postrazor = async (req, res,next) => {
     try {
         let serverOrder = req.body.orderId;
         let razorOrder = req.body.razorOrderid;
@@ -118,7 +119,9 @@ const postrazor = async (req, res) => {
             res.json({message: "Payment failed"});
         }
     catch (error) {
+        next(error);
         console.log(error.message);
+next(error);
     }
 };
 
@@ -156,10 +159,11 @@ const sendResetPasswordMail = async (name, email, token) => {
         });
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const loadregister = async (req, res) => {
+const loadregister = async (req, res,next) => {
     try {
         res.render("registration");
     } catch (error) {
@@ -167,57 +171,71 @@ const loadregister = async (req, res) => {
     }
 };
 
-const loadLogin = async (req, res) => {
+const loadLogin = async (req,res,next) => {
     try {
         res.render("login");
     } catch (error) {
+        next(error);
         console.log(error.message);
+next(error);
     }
 };
 
-const insertUser = async (req, res) => {
-    console.log("start");
-    const emailExist = await User.findOne({email: req.body.email});
+const insertUser = async (req, res, next) => {
+    try {
+         const emailExist = await User.findOne({ email: req.body.email });
 
-    if (!emailExist) {
-        const numberExist = await User.findOne({mobile: req.body.mobile});
-        if (!numberExist) {
-            req.session.userData = req.body;
+         if (!emailExist) {
+           const numberExist = await User.findOne({ mobile: req.body.mobile });
+           if (!numberExist) {
+             req.session.userData = req.body;
 
-            if (req.session.userData) {
-                if (req.session.userData.mobile) {
-                    num2 = req.session.userData.mobile;
-                    client
-                        .verify
-                        .v2
-                        .services
-                        .create({friendlyName: "CriptSea OTP Verification"})
-                        .then((service) => {
-                            sid = service.sid;
-                            client
-                                .verify
-                                .v2
-                                .services(service.sid)
-                                .verifications
-                                .create({to: `+91${num2}`, channel: "sms"})
-                                .then((verification) => console.log(verification.status));
-                        });
-                    res.render("otpverification");
-                } else {
-                    res.render("registration", {message: "Number is invalid"});
-                }
-            } else {
-                res.render("registration", {message: "Enter all fields proper"});
-            }
-        } else {
-            res.render("registration", {message2: "Account already exist!!"});
-        }
-    } else {
-        res.render("registration", {message2: "E-mail already exist!!"});
+             if (req.session.userData) {
+               if (req.session.userData.mobile) {
+                 num2 = req.session.userData.mobile;
+                 client.verify.v2.services
+                   .create({ friendlyName: "CriptSea OTP Verification" })
+                   .then((service) => {
+                     sid = service.sid;
+                     client.verify.v2
+                       .services(service.sid)
+                       .verifications.create({
+                         to: `+91${num2}`,
+                         channel: "sms",
+                       })
+                       .then((verification) =>
+                         console.log(verification.status)
+                       );
+                   });
+                 res.render("otpverification");
+               } else {
+                 res.render("registration", { message: "Number is invalid" });
+               }
+             } else {
+               res.render("registration", {
+                 message: "Enter all fields proper",
+               });
+             }
+           } else {
+             res.render("registration", {
+               message2: "Account already exist!!",
+             });
+           }
+         } else {
+           res.render("registration", { message2: "E-mail already exist!!" });
+         }
+        
+    } catch (error) {
+        next(error);
+        console.log(error.message);
+next(error);
+        
     }
+   
+   
 };
 
-const verifyLogin = async (req, res) => {
+const verifyLogin = async (req, res,next) => {
     try {
         const email = req.body.email;
         req.session.email = email;
@@ -242,6 +260,7 @@ const verifyLogin = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 
     // try{         const number = req.body.number         const email =
@@ -251,15 +270,16 @@ const verifyLogin = async (req, res) => {
     // console.log(err);     }
 };
 
-const otpPass = async (req, res) => {
+const otpPass = async (req,res,next) => {
     try {
         res.render("otpenter");
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const otpSend = async (req, res) => {
+const otpSend = async (req,res,next) => {
     try {
         req.session.numb = req.body.number;
         console.log(req.session);
@@ -296,10 +316,11 @@ const otpSend = async (req, res) => {
         res.redirect("/otpverification");
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const loadHome = async (req, res) => {
+const loadHome = async (req,res,next) => {
     try {
         const categoryData = await Category.find({__v: 0});
         req.session.categoryData = categoryData;
@@ -410,10 +431,11 @@ const loadHome = async (req, res) => {
         // res.redirect('/home')
     } catch (error) {
         console.log(error.message);
+next(error);
     }
-};
+}
 
-const verifyMail = async (req, res) => {
+const verifyMail = async (req,res,next) => {
     try {
         const updateInfo = await User.updateOne({
             _id: req.query.id
@@ -429,7 +451,7 @@ const verifyMail = async (req, res) => {
     }
 };
 
-const verifyotp = async (req, res) => {
+const verifyotp = async (req,res,next) => {
     try {
         console.log("ivdeee");
         res.render("otpverification");
@@ -438,7 +460,7 @@ const verifyotp = async (req, res) => {
     }
 };
 
-const grabnum = async (req, res) => {
+const grabnum = async (req,res,next) => {
     try {
         const gototp = req.body.gototp;
         console.log(gototp);
@@ -499,10 +521,11 @@ const grabnum = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const forgetLoad = async (req, res) => {
+const forgetLoad = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             res.redirect("/home");
@@ -511,10 +534,11 @@ const forgetLoad = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const forgetPass = async (req, res) => {
+const forgetPass = async (req,res,next) => {
     try {
         const userData = await User.findOne({email: req.body.email});
         console.log("5", userData);
@@ -547,7 +571,7 @@ const forgetPass = async (req, res) => {
     }
 };
 
-const forgetpasswordload = async (req, res) => {
+const forgetpasswordload = async (req,res,next) => {
     try {
         console.log("forgetpasswrdload");
         const token = req.query.token;
@@ -561,10 +585,11 @@ const forgetpasswordload = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const resetPassword = async (req, res) => {
+const resetPassword = async (req,res,next) => {
     try {
         const password = req.body.password;
         const user_id = req.body.user_id;
@@ -583,10 +608,11 @@ const resetPassword = async (req, res) => {
         console.log("1", token);
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const loadShop = async (req, res) => {
+const loadShop = async (req,res,next) => {
     try {
         let page = 1
         if (req.query.page) {
@@ -689,10 +715,11 @@ const loadShop = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const loadContact = async (req, res) => {
+const loadContact = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             const userData = req.session.user_id;
@@ -755,10 +782,11 @@ const loadContact = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const loadDetail = async (req, res) => {
+const loadDetail = async (req,res,next) => {
     try {
      
             const productData = await Product.findById({
@@ -818,10 +846,11 @@ const loadDetail = async (req, res) => {
         
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const userLogout = async (req, res) => {
+const userLogout = async (req,res,next) => {
     try {
         req
             .session
@@ -829,10 +858,11 @@ const userLogout = async (req, res) => {
         res.redirect("/home");
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const viewUserprof = async (req, res) => {
+const viewUserprof = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             const id = req.session.user_id;
@@ -898,10 +928,11 @@ const viewUserprof = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const userEdit = async (req, res) => {
+const userEdit = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             const id = req.session.user_id;
@@ -967,10 +998,11 @@ const userEdit = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const updateUser = async (req, res) => {
+const updateUser = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             const id = req.session.user_id;
@@ -1008,10 +1040,11 @@ const updateUser = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const get_add_address = async (req, res) => {
+const get_add_address = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             const id = req.session.user_id;
@@ -1076,10 +1109,11 @@ const get_add_address = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const add_address = async (req, res) => {
+const add_address = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             const id = req.session.user_id;
@@ -1116,10 +1150,11 @@ const add_address = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const categorywise_product = async (req, res) => {
+const categorywise_product = async (req,res,next) => {
     try {
         let page = 1;
         if (req.query.page) {
@@ -1233,10 +1268,11 @@ const categorywise_product = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const loadCart = async (req, res) => {
+const loadCart = async (req,res,next) => {
     try {
         const categoryData = await Category.find({});
 
@@ -1333,10 +1369,11 @@ const loadCart = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const addtocart = async (req, res) => {
+const addtocart = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             const id = req.params.proId;
@@ -1425,10 +1462,11 @@ const addtocart = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const itemdelete = async (req, res) => {
+const itemdelete = async (req,res,next) => {
     try {
         id = req.query.id;
         console.log(id);
@@ -1447,10 +1485,11 @@ const itemdelete = async (req, res) => {
         res.redirect("/cart");
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const increment = async (req, res) => {
+const increment = async (req,res,next) => {
     try {
         console.log('start');
 
@@ -1505,9 +1544,10 @@ const increment = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
-const decrement = async (req, res) => {
+const decrement = async (req,res,next) => {
     try {
         let id = req.params.cartquant;
         productData = await Product.findById({ _id: id, active: true });
@@ -1565,18 +1605,20 @@ const decrement = async (req, res) => {
         res.redirect("/cart");
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const updatecart = async (req, res) => {
+const updatecart = async (req,res,next) => {
     try {
         res.redirect("/cart");
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const addtowishlist = async (req, res) => {
+const addtowishlist = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             id = req.query.proId;
@@ -1634,10 +1676,11 @@ const addtowishlist = async (req, res) => {
        
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const loadWishlist = async (req, res) => {
+const loadWishlist = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             const userData = await User.findById(req.session.user_id);
@@ -1733,10 +1776,11 @@ const loadWishlist = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const wishlistitemdelete = async (req, res) => {
+const wishlistitemdelete = async (req,res,next) => {
     try {
         id = req.query.id;
         console.log(id);
@@ -1755,10 +1799,11 @@ const wishlistitemdelete = async (req, res) => {
         res.redirect("/wishlist");
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const loadCheckout = async (req, res) => {
+const loadCheckout = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             const userData = await User.findById(req.session.user_id)
@@ -1806,10 +1851,11 @@ const loadCheckout = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const postcheckout = async (req, res) => {
+const postcheckout = async (req,res,next) => {
     try {
       
         let walletUsed = req.body.walletUsed;
@@ -1870,10 +1916,11 @@ const postcheckout = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const neworderaddress = async (req, res) => {
+const neworderaddress = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             const id = req.session.user_id;
@@ -1908,10 +1955,11 @@ const neworderaddress = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const couponApply = async (req, res) => {
+const couponApply = async (req,res,next) => {
     try {
         const userData = await User.findById({_id: req.session.user_id});
         const body = req.params.content;
@@ -1975,10 +2023,11 @@ const couponApply = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const addToWallet = async (req, res) => {
+const addToWallet = async (req,res,next) => {
     try {
         console.log("startstartstart");
         if (req.session.user_id) {
@@ -2022,7 +2071,7 @@ const addToWallet = async (req, res) => {
     } catch (error) {}
 };
 
-const walletUse = async (req, res) => {
+const walletUse = async (req,res,next) => {
     try {
         let total = req.body.total;
       let walletUsed = req.body.walletUsed;
@@ -2067,10 +2116,11 @@ const walletUse = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const placedorder = async (req, res) => {
+const placedorder = async (req,res,next) => {
     try {
     
         let couponUsed = req.session.couponApplied;
@@ -2216,10 +2266,11 @@ const placedorder = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const loadorderhistory = async (req, res) => {
+const loadorderhistory = async (req,res,next) => {
     try {
       
 
@@ -2294,10 +2345,11 @@ const loadorderhistory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const loadorderview = async (req, res) => {
+const loadorderview = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             const id = req.session.user_id;
@@ -2373,10 +2425,11 @@ const loadorderview = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const loadordercancel = async (req, res) => {
+const loadordercancel = async (req,res,next) => {
     try {
         id = req.query.id;
         const orderData = await Order.findByIdAndUpdate({
@@ -2415,10 +2468,11 @@ const loadordercancel = async (req, res) => {
         res.redirect("/orderhistory");
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const addressEdit = async (req, res) => {
+const addressEdit = async (req,res,next) => {
     try {
         id = req.query.id;
         const userData = await User.findById({_id: req.session.user_id});
@@ -2445,10 +2499,11 @@ const addressEdit = async (req, res) => {
         res.redirect("/userview");
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const addressEditload = async (req, res) => {
+const addressEditload = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             const id = req.session.user_id;
@@ -2522,10 +2577,11 @@ const addressEditload = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const delete_address = async (req, res) => {
+const delete_address = async (req,res,next) => {
     try {
         console.log("start");
         id = req.query.id;
@@ -2545,10 +2601,11 @@ const delete_address = async (req, res) => {
         console.log("end");
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 };
 
-const passwordChange = async (req, res) => {
+const passwordChange = async (req,res,next) => {
     try {
         const userData = await User.findById({_id: req.session.user_id});
         const password = req.body.oldpsw;
@@ -2569,10 +2626,11 @@ const passwordChange = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+next(error);
     }
 }
 
-const invoiceExport = async (req, res) => {
+const invoiceExport = async (req,res,next) => {
     try {
         let id = req.query.orderData;
         
@@ -2628,6 +2686,7 @@ const invoiceExport = async (req, res) => {
         stream.pipe(res);
     } catch (error) {
         console.log(error.message);
+next(error);
         res
             .status(500)
             .send("Internal server error");

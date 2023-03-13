@@ -1,7 +1,11 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
-mongoose.connect(process.env.MONGOOSE_LINK, { useNewUrlParser: true });
+mongoose.connect(process.env.MONGOOSE_LINK).then(() => {
+  console.log('database connected');
+}).catch((err) => {
+  console.log(err);
+})
 const express = require("express");
 const flash = require("connect-flash");
 
@@ -26,12 +30,17 @@ app.use((req, res, next) => {
   next();
 });
 
+
+
+
 // app.use((req,res,next)=>{
 //     res.set('cache-control','no-store')
 //     next()
 // })
 
 //for user-route
+app.set("view engine", "ejs");
+app.set("views", "views");
 
 const userRoute = require("./routes/userRoute");
 app.use("/", userRoute);
@@ -48,6 +57,30 @@ app.use(express.static(path.join(__dirname, "lib")));
 //for admin-route
 const adminRoute = require("./routes/adminRoute");
 app.use("/admin", adminRoute);
+
+
+
+
+app.use(function (req, res, next) {
+  res.status(404);
+
+  // respond with html page
+  if (req.accepts("html")) {
+    res.render("404", { url: req.url });
+    return;
+  }
+});
+
+app.use(function (err, req, res, next) {
+  res.status(500);
+
+  // respond with HTML page for 500 errors
+  if (req.accepts("html")) {
+    res.render("500", { error: err });
+    return;
+  }
+});
+
 
 app.listen(4000, () => {
   console.log("Server is running");

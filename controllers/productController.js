@@ -12,7 +12,7 @@ const path = require("path");
 const {ObjectId} = require("mongodb");
 const mongoose = require("mongoose");
 
-const loadProducts = async (req, res) => {
+const loadProducts = async (req,res,next) => {
     try {
         const category_name = await Category.find({}, {_id: 1});
 
@@ -40,11 +40,12 @@ const loadProducts = async (req, res) => {
             });
         }
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
     }
 };
 
-const viewProductLoad = async (req, res) => {
+const viewProductLoad = async (req,res,next) => {
     try {
         const id = req.query.id;
         const productData = await Product
@@ -53,11 +54,12 @@ const viewProductLoad = async (req, res) => {
 
         res.render("view-product", {products: productData});
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
     }
 };
 
-const productDelete = async (req, res) => {
+const productDelete = async (req,res,next) => {
     try {
         const id = req.query.id;
         await Product.findByIdAndUpdate(
@@ -66,11 +68,12 @@ const productDelete = async (req, res) => {
         );
         res.redirect("/admin/products");
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
     }
 };
 
-const editProductLoad = async (req, res) => {
+const editProductLoad = async (req,res,next) => {
     try {
         const id = req.query.id;
         const categoryData = await Category.find({__v: 0});
@@ -84,20 +87,22 @@ const editProductLoad = async (req, res) => {
             res.redirect("/admin/products");
         }
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
     }
 };
 
-const addProductLoad = async (req, res) => {
+const addProductLoad = async (req,res,next) => {
     try {
         const categoryData = await Category.find({__v: 0});
         res.render("add-product", {category: categoryData});
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
     }
 };
 
-const addProduct = async (req, res) => {
+const addProduct = async (req,res,next) => {
     try {
         const product_Data = await Product.findOne({
           name: req.body.name,
@@ -147,15 +152,16 @@ const addProduct = async (req, res) => {
             });
         }
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
     }
 };
 
-// const productEdit = async(req,res)=>{     try {
+// const productEdit = async(req,res,next)=>{     try {
 // res.render('edit-product')     } catch (error) {home
 // console.log(error.mesage);     } }
 
-const updateProduct = async (req, res) => {
+const updateProduct = async (req,res,next) => {
     try {
         const product = await Product.findById({
           _id: req.body.id,
@@ -199,13 +205,14 @@ const updateProduct = async (req, res) => {
 
         res.redirect("/admin/products");
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
     }
 };
 
 
 
-const loadsortproduct = async (req, res) => {
+const loadsortproduct = async (req,res,next) => {
     try {
         const sortOption = req.query.sort_option;
 
@@ -226,11 +233,12 @@ const loadsortproduct = async (req, res) => {
 
         res.json({sortedproducts});
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
     }
 };
 
-const reviewProduct = async (req, res) => {
+const reviewProduct = async (req,res,next) => {
     try {
         let rating = req.body.rating;
         let content = req.body.content;
@@ -259,11 +267,12 @@ const reviewProduct = async (req, res) => {
 
         res.json({success: true});
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
     }
 };
 
-const productSearch = async (req, res) => {
+const productSearch = async (req,res,next) => {
     try {
         let page = 1
         const limit = 6
@@ -292,11 +301,12 @@ const productSearch = async (req, res) => {
 
         res.json({product: productData});
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
     }
 };
 
-const productFilter = async (req, res) => {
+const productFilter = async (req,res,next) => {
     try {
         let page = 1
         let limit = 6;
@@ -369,16 +379,18 @@ const productFilter = async (req, res) => {
       res.json({ sortedproducts: products });
     }
   } catch (error) {
-    console.log(error.message);
+    next(error)
+console.log(error.message);
     res.status(500).json({ error: "Server error" });
   }
 };
 
-const deleteProductImage = async (req, res) => { 
+const deleteProductImage = async (req,res,next) => { 
   try {
        
             const path = require("path");
-            const image = (req.body.image);
+    const image = req.body.image
+    console.log(image,'nameeee');
             const imagePath = path.join(
               __dirname,
               "..",
@@ -402,7 +414,8 @@ const deleteProductImage = async (req, res) => {
             res.json({ status: true, productimg: product._id });
         
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
         
     }
 }

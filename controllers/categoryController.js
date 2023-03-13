@@ -1,17 +1,18 @@
 const Category = require('../model/categoryModel')
 const Product = require('../model/productModel')
 
-const categoryAddLoad = async (req, res) => {
+const categoryAddLoad = async (req,res,next) => {
     try {
         res.render('add-category')
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const categoryAdd = async (req, res) => {
+const categoryAdd = async (req,res,next) => {
     try {
         const category_data = await Category.findOne({name: req.body.name})
         if (!category_data) {
@@ -31,12 +32,13 @@ const categoryAdd = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const categoryDelete = async (req, res) => {
+const categoryDelete = async (req,res,next) => {
     try {
         const id = req.params.category_id;
         const productData = await Product.find({ category: id,active:true })
@@ -55,24 +57,26 @@ const categoryDelete = async (req, res) => {
         res.redirect('/admin/products')
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const categoryEditLoad = async (req, res) => {
+const categoryEditLoad = async (req,res,next) => {
     try {
         const categoryData = await Category.findById({_id: req.query.id})
 
         res.render('edit-category', {categories: categoryData})
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const categoryEdit = async (req, res) => {
+const categoryEdit = async (req,res,next) => {
     try {
         if (req.file) {
             const updatedCategoryData = await Category.findByIdAndUpdate({
@@ -97,12 +101,13 @@ const categoryEdit = async (req, res) => {
         res.redirect('/admin/products')
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
 
-const loadcategoryfilter = async (req, res) => {
+const loadcategoryfilter = async (req,res,next) => {
     try {
         console.log('start')
         let val = req
@@ -122,13 +127,14 @@ const loadcategoryfilter = async (req, res) => {
         res.json({resltproducts})
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 
 }
 
-const loadAllcategory = async (req, res) => {
+const loadAllcategory = async (req,res,next) => {
     try {
         const allproducts = await Product.find({ active: true });
         console.log(allproducts,'allproductsshgsghsghs');
@@ -136,7 +142,8 @@ const loadAllcategory = async (req, res) => {
         res.json({allproducts})
 
     } catch (error) {
-        console.log(error.message);
+        next(error)
+console.log(error.message);
 
     }
 }
