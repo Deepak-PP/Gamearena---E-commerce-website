@@ -22,7 +22,7 @@
                             <div class="p-3" style="max-width: 700px;">
                                 <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Gaming Laptops</h1>
                                 <p class="mx-md-5 px-5 animate__animated animate__bounceIn"><%= bannerData[0].description[0] %></p>
-                                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="#">Shop Now</a>
+                                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="/category_shop/?id=<%=categories[0]._id%>">Shop Now</a>
                             </div>
                         </div>
                     </div>
@@ -32,7 +32,7 @@
                             <div class="p-3" style="max-width: 700px;">
                                 <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Gaming Laptops</h1>
                                 <p class="mx-md-5 px-5 animate__animated animate__bounceIn"><%= bannerData[0].description[1] %></p>
-                                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="#">Shop Now</a>
+                                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="/category_shop/?id=<%=categories[0]._id%>">Shop Now</a>
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                             <div class="p-3" style="max-width: 700px;">
                                 <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Gaming Laptops</h1>
                                 <p class="mx-md-5 px-5 animate__animated animate__bounceIn"><%= bannerData[0].description[2] %></p>
-                                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="#">Shop Now</a>
+                                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="/category_shop/?id=<%=categories[0]._id%>">Shop Now</a>
                             </div>
                         </div>
                     </div>
@@ -211,7 +211,7 @@
                     <div class="offer-text">
                         <h6 class="text-white text-uppercase">Save 20%</h6>
                         <h3 class="text-white mb-3">Special Offer</h3>
-                        <a href="" class="btn btn-primary">Shop Now</a>
+                        <a href="/category_shop/?id=<%=categories[3]._id%>" class="btn btn-primary">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -224,7 +224,7 @@
                     <div class="offer-text">
                         <h6 class="text-white text-uppercase">Save 20%</h6>
                         <h3 class="text-white mb-3">Special Offer</h3>
-                        <a href="" class="btn btn-primary">Shop Now</a>
+                        <a href="/category_shop/?id=<%=categories[5]._id%>" class="btn btn-primary">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -326,7 +326,7 @@ src="/vendor-8.jpg" alt=""> </div> </div> </div> </div> </div> -->
                 if (response.success == true) {
                     Toast.fire({ icon: 'success', title: "Item added to cart" })
                     setTimeout(() => {
-                        window.location.href = "/home"
+                        window.location.href = "/"
 
                     }, 3000);
                 } else if (response.success == false) {
@@ -334,14 +334,14 @@ src="/vendor-8.jpg" alt=""> </div> </div> </div> </div> </div> -->
                 } else if (response.message) {
                     Toast.fire({ icon: 'success', title: "Product added again" })
                     setTimeout(() => {
-                        window.location.href = "/home"
+                        window.location.href = "/"
 
                     }, 3000);
 
                 } else if (response.message2) {
                     Toast.fire({ icon: 'error', title: response.message2 })
                     setTimeout(() => {
-                        window.location.href = "/home"
+                        window.location.href = "/"
 
                     }, 3000);
 
@@ -372,20 +372,20 @@ src="/vendor-8.jpg" alt=""> </div> </div> </div> </div> </div> -->
                     if (response.success == true) {
                         Toast.fire({ icon: 'success', title: "Item added to Wishllist" })
                         setTimeout(() => {
-                            window.location.href = "/home"
+                            window.location.href = "/"
 
                         }, 3000);
                     } else if (response.message1) {
                         Toast.fire({ icon: 'success', title: response.message1 })
                         setTimeout(() => {
-                            window.location.href = "/home"
+                            window.location.href = "/"
 
                         }, 3000);
 
                     } else if (response.message2) {
                         Toast.fire({ icon: 'error', title: response.message2 })
                         setTimeout(() => {
-                            window.location.href = "/home"
+                            window.location.href = "/"
 
                         }, 3000);
 

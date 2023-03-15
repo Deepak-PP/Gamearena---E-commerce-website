@@ -26,7 +26,7 @@ user_route.post('/otpenter',auth.isLogout,usercntrlr.otpSend)
 user_route.get('/otpverification',auth.isLogout,usercntrlr.verifyotp)
 user_route.post('/otpverification',auth.isLogout,usercntrlr.grabnum)
 
-user_route.get('/home',auth.isLogin,usercntrlr.loadHome)
+user_route.get('/',auth.isLogin,usercntrlr.loadHome)
 
 user_route.get('/verifym',usercntrlr.verifyMail)
 

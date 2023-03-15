@@ -102,7 +102,7 @@ const postrazor = async (req, res,next) => {
         let generated_signature = hmac_sha256(serverOrder + "|" + payid, keysecret);
 
         if (generated_signature == signature) {
-            res.json({message: "Payment Successfull"});
+            res.json({message1: "Payment Successfull"});
             const orderData = await Order
                 .findOne({})
                 .sort({createdAt: -1})
@@ -116,7 +116,7 @@ const postrazor = async (req, res,next) => {
                 }
             });
         } else 
-            res.json({message: "Payment failed"});
+            res.json({message2: "Payment failed"});
         }
     catch (error) {
         next(error);
@@ -149,7 +149,7 @@ const sendResetPasswordMail = async (name, email, token) => {
             html: "<p>Hi " + name + ',please click here to <a href="http://127.0.0.1:3000/forget-' +
                     'password?token=' + token + '">Reset</a> your password.</p>'
         };
-        console.log("6", token);
+     
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log(error);
@@ -248,7 +248,7 @@ const verifyLogin = async (req, res,next) => {
                 const passwordMatch = await bcrypt.compare(password, userData.password);
                 if (passwordMatch) {
                     req.session.user_id = userData._id;
-                    res.redirect("/home");
+                    res.redirect("/");
                 } else {
                     res.render("login", {message: "Password incorrect"});
                 }
@@ -263,11 +263,7 @@ const verifyLogin = async (req, res,next) => {
 next(error);
     }
 
-    // try{         const number = req.body.number         const email =
-    // req.body.email         const password = req.body.password         const
-    // mobile = req.body.mobile         const userData = await User.findOne({ email:
-    // email })         const num  = userData.mobile     }catch(err){
-    // console.log(err);     }
+  
 };
 
 const otpPass = async (req,res,next) => {
@@ -282,14 +278,10 @@ next(error);
 const otpSend = async (req,res,next) => {
     try {
         req.session.numb = req.body.number;
-        console.log(req.session);
-        // number=req.session.numb
-        console.log(req.session.numb);
-        const userData = await User.findOne({mobile: req.session.numb});
-        console.log(userData.mobile);
 
+        const userData = await User.findOne({mobile: req.session.numb});
         function sendTextMessage() {
-            console.log("function workinggg");
+           
             try {
                 client
                     .verify
@@ -349,7 +341,7 @@ const loadHome = async (req,res,next) => {
                 }
             }
         ]);
-        console.log("pn", productNumber);
+   
         if (req.session.user_id) {
             const userData = req.session.user_id;
             const cartData = await Cart.findOne({user: ObjectId(userData)});
@@ -412,7 +404,7 @@ const loadHome = async (req,res,next) => {
             }
         } else {
               const bannerData = await Banner.find({});
-            console.log("else");
+          
             let cartcount = 0;
             let wishlistcount = 0;
             const userData = req.session.user_id;
@@ -428,7 +420,7 @@ const loadHome = async (req,res,next) => {
             });
         }
 
-        // res.redirect('/home')
+       
     } catch (error) {
         console.log(error.message);
 next(error);
@@ -444,7 +436,7 @@ const verifyMail = async (req,res,next) => {
                 is_verified: 1
             }
         });
-        console.log(updateInfo);
+      
         res.render("email-verified");
     } catch (error) {
         console.log(error.message);
@@ -453,7 +445,7 @@ const verifyMail = async (req,res,next) => {
 
 const verifyotp = async (req,res,next) => {
     try {
-        console.log("ivdeee");
+       
         res.render("otpverification");
     } catch (error) {
         console.log(error.message);
@@ -463,8 +455,8 @@ const verifyotp = async (req,res,next) => {
 const grabnum = async (req,res,next) => {
     try {
         const gototp = req.body.gototp;
-        console.log(gototp);
-        console.log(req.session);
+      
+      
         if (req.session.userData) {
             num2 = req.session.userData.mobile;
 
@@ -487,8 +479,8 @@ const grabnum = async (req,res,next) => {
 
                                 const userData = await user.save();
                                 req.session.user_id = userData._id;
-                                res.redirect("/home");
-                                console.log(userData);
+                                res.redirect("/");
+                            
                             })();
                         }
                     } else {
@@ -497,10 +489,8 @@ const grabnum = async (req,res,next) => {
                 });
         } else if (req.session.numb) {
             const userData = await User.findOne({mobile: req.session.numb});
-            console.log(userData.mobile);
-
             num = req.session.numb;
-            console.log(num);
+         
 
             client
                 .verify
@@ -513,7 +503,7 @@ const grabnum = async (req,res,next) => {
 
                     if (verification_Check.status === "approved") {
                         req.session.user_id = userData._id;
-                        res.redirect("/home");
+                        res.redirect("/");
                     } else {
                         res.render("registration", {message: "Verification failed"});
                     }
@@ -528,7 +518,7 @@ next(error);
 const forgetLoad = async (req,res,next) => {
     try {
         if (req.session.user_id) {
-            res.redirect("/home");
+            res.redirect("/");
         } else {
             res.render("forget");
         }
@@ -541,7 +531,7 @@ next(error);
 const forgetPass = async (req,res,next) => {
     try {
         const userData = await User.findOne({email: req.body.email});
-        console.log("5", userData);
+    
         if (userData) {
             if (userData.is_verified === 0) {
                 res.render("forget", {message: "Verify your mail"});
@@ -554,10 +544,10 @@ const forgetPass = async (req,res,next) => {
                         token: randomstring
                     }
                 });
-                console.log("4", updatedData);
+              
 
                 sendResetPasswordMail(userData.name, userData.email, randomstring);
-                console.log("hiiiii");
+               
                 res.render(
                     "forget",
                     {message: "PLease check your mail to reset your password"}
@@ -573,11 +563,11 @@ const forgetPass = async (req,res,next) => {
 
 const forgetpasswordload = async (req,res,next) => {
     try {
-        console.log("forgetpasswrdload");
+    
         const token = req.query.token;
-        console.log("3", token);
+     
         const tokenData = await User.findOne({token: token});
-        console.log("2", tokenData);
+    
         if (tokenData) {
             res.render("forget-password", {user_id: tokenData._id});
         } else {
@@ -605,7 +595,7 @@ const resetPassword = async (req,res,next) => {
             }
         });
         res.redirect("/register");
-        console.log("1", token);
+      
     } catch (error) {
         console.log(error.message);
 next(error);
@@ -629,7 +619,7 @@ const loadShop = async (req,res,next) => {
             const count = await Product
                 .find({})
                 .countDocuments()
-            console.log(productData, "proddddata");
+          
             const userData = req.session.user_id;
             const cartData = await Cart.findOne({user: ObjectId(userData)});
             const wishlistData = await Wishlist.findOne({ user: ObjectId(userData) });
@@ -793,7 +783,7 @@ const loadDetail = async (req,res,next) => {
               _id: req.query.id,
               active: true,
             });
-            console.log(productData.reviews.length);
+          
             const userData = req.session.user_id;
             const categoryData = await Category.find({});
             const cartData = await Cart.findOne({user: ObjectId(userData)});
@@ -855,7 +845,7 @@ const userLogout = async (req,res,next) => {
         req
             .session
             .destroy();
-        res.redirect("/home");
+        res.redirect("/");
     } catch (error) {
         console.log(error.message);
 next(error);
@@ -864,7 +854,9 @@ next(error);
 
 const viewUserprof = async (req,res,next) => {
     try {
+      
         if (req.session.user_id) {
+             console.log("reached here", 2);
             const id = req.session.user_id;
             const userData = await User.findById({_id: id})
             const categoryData = await Category.find({});
@@ -875,7 +867,7 @@ const viewUserprof = async (req,res,next) => {
                 const cartcount = cartData.products.length;
                 const wishlistcount = wishlistData.products.length;
 
-                console.log("1", userData);
+            
                 res.render("userview", {
                     user_in: userData,
                     categories: categoryData,
@@ -901,9 +893,10 @@ const viewUserprof = async (req,res,next) => {
                     wishlistcount
                 });
             } else if (cartData === null && wishlistData === null) {
+               
                 let cartcount = 0;
                 let wishlistcount = 0;
-                const userData = req.session.user_id;
+               
                 res.render("userview", {
                     user_in: userData,
                     categories: categoryData,
@@ -945,7 +938,7 @@ const userEdit = async (req,res,next) => {
                 const cartcount = cartData.products.length;
                 const wishlistcount = wishlistData.products.length;
 
-                console.log("1", userData);
+             
                 res.render("edit-user", {
                     user_in: userData,
                     categories: categoryData,
@@ -1009,7 +1002,7 @@ const updateUser = async (req,res,next) => {
             const userData = await User.findById({_id: id});
             const categoryData = await Category.find({});
 
-            console.log("1", userData);
+        
 
             const addressData = {
                 address1: req.body.address1,
@@ -1019,7 +1012,7 @@ const updateUser = async (req,res,next) => {
                 street: req.body.street,
                 postalCode: req.body.pin
             };
-            console.log(id);
+         
 
             const updatedUserData = await User.findByIdAndUpdate({
                 _id: id
@@ -1034,7 +1027,7 @@ const updateUser = async (req,res,next) => {
                 }
             });
             // {$set: { }})
-            console.log(updatedUserData);
+          
 
             res.redirect("/userview");
         }
@@ -1120,7 +1113,7 @@ const add_address = async (req,res,next) => {
             const userData = await User.findById({_id: id});
             const categoryData = await Category.find({});
 
-            console.log(userData);
+           
 
             const addressData = {
                 name: req.body.name,
@@ -1132,7 +1125,7 @@ const add_address = async (req,res,next) => {
                 mobile: req.body.mobile,
                 postalCode: req.body.pin
             };
-            console.log(id);
+           
 
             const updatedUserData = await User.findByIdAndUpdate({
                 _id: id
@@ -1144,7 +1137,7 @@ const add_address = async (req,res,next) => {
                 }
             });
             // {$set: { }})
-            console.log(updatedUserData);
+         
 
             res.redirect("/userview");
         }
@@ -1289,7 +1282,7 @@ const loadCart = async (req,res,next) => {
                         $in: prodata
                     }
                 });
-                console.log(productData, 'hgafshgfdashdfahsgdhags');
+              
 
                 const cartcount = cartData.products.length;
                 const wishlistcount = wishlistData.products.length;
@@ -1336,16 +1329,16 @@ const loadCart = async (req,res,next) => {
                     wishlistcount
                 });
             } else if (cartData === null && wishlistData === null) {
+              
                 let cartcount = 0;
                 let wishlistcount = 0;
                 let productData = 0;
                 let value = null;
-                const userData = req.session.user_id;
+             
                 res.render("cart", {
                     user_in: userData,
                     categories: categoryData,
                     cartproducts: productData,
-                    value,
                     cartcount,
                     wishlistcount
                 });
@@ -1381,15 +1374,14 @@ const addtocart = async (req,res,next) => {
               _id: id,
               active: true,
             });
-            console.log(productData);
+         
             const price = productData.price;
 
             const userData = await User.findById(req.session.user_id);
             const cartData = await Cart.findOne({ user: ObjectId(userData) });
-            console.log(",cartdata", cartData);
-            console.log("reached here");
+         
             if (cartData) {
-                console.log("enter update");
+             
                 let cartproduct = await Cart.findOne({
                     user: req.session.user_id,
                     products: {
@@ -1419,7 +1411,7 @@ const addtocart = async (req,res,next) => {
                                 },
                             }
                         );
-                        console.log("4", updatedcartData);
+                      
 
                         res.json({ success: true });
                     }
@@ -1435,11 +1427,11 @@ const addtocart = async (req,res,next) => {
                             },
                         }
                     );
-                    console.log("else", cartData);
+                   
                     res.json({ message: "Item added again" });
                 }
             } else {
-                console.log("heree");
+              
                 const cartdata = new Cart({
                     user: userData,
                     products: [
@@ -1451,7 +1443,7 @@ const addtocart = async (req,res,next) => {
                     ],
                 });
                 const cartData = await cartdata.save();
-                console.log("2", cartData);
+            
                 res.json({ message: "Item added to Cart" });
             }
 
@@ -1469,9 +1461,9 @@ next(error);
 const itemdelete = async (req,res,next) => {
     try {
         id = req.query.id;
-        console.log(id);
+      
         const userData = await User.findById({_id: req.session.user_id});
-        console.log(userData);
+      
         await Cart.updateOne({
             user: ObjectId(userData)
         }, {
@@ -1491,7 +1483,7 @@ next(error);
 
 const increment = async (req,res,next) => {
     try {
-        console.log('start');
+    
 
         const id = req.query.proId;
         const stock = req.query.stock;
@@ -1523,7 +1515,7 @@ const increment = async (req,res,next) => {
         // productDat = await Cart.findOne({user:req.session.user_id}) let
         prodata = productData.products;
         subtotal = prodata.map((p) => p.pricetotal);
-        console.log(subtotal, "total");
+      
         let sum = subtotal.reduce((sum, num) => sum + num);
 
         if (quantity < stock) {
@@ -1596,7 +1588,7 @@ const decrement = async (req,res,next) => {
 
                 prodata = productData.products;
                 subtotal = prodata.map((p) => p.pricetotal);
-                console.log(subtotal, "total");
+               
                 let sum = subtotal.reduce((sum, num) => sum + num);
 
                 res.json({updatedPrice, sum});
@@ -1622,7 +1614,10 @@ const addtowishlist = async (req,res,next) => {
     try {
         if (req.session.user_id) {
             id = req.query.proId;
-            const productData = await Product.findById({id, active: true});
+            const productData = await Product.findOne({
+              id: id,
+              active: true,
+            });
 
             const userData = await User.findById(req.session.user_id);
 
@@ -1701,7 +1696,7 @@ const loadWishlist = async (req,res,next) => {
                   },
                   active: true,
                 });
-                console.log(wishlistproducts, "wishpro");
+                
 
                 res.render("wishlist", {
                     user_in: userData,
@@ -1748,7 +1743,7 @@ const loadWishlist = async (req,res,next) => {
                 let wishlistcount = 0;
                 let wishlistproducts = 0;
                 let value = null;
-                const userData = req.session.user_id;
+               
                 res.render("wishlist", {
                     user_in: userData,
                     categories: categoryData,
@@ -1783,9 +1778,9 @@ next(error);
 const wishlistitemdelete = async (req,res,next) => {
     try {
         id = req.query.id;
-        console.log(id);
+     
         const userData = await User.findById({_id: req.session.user_id});
-        console.log(userData);
+     
         await Wishlist.updateOne({
             user: ObjectId(userData)
         }, {
@@ -1937,7 +1932,7 @@ const neworderaddress = async (req,res,next) => {
                 mobile: req.body.mobile,
                 postalCode: req.body.pin
             };
-            console.log(id);
+         
 
             const updatedUserData = await User.findByIdAndUpdate({
                 _id: id
@@ -1949,7 +1944,7 @@ const neworderaddress = async (req,res,next) => {
                 }
             });
 
-            console.log(updatedUserData);
+           
 
             res.redirect("/checkout");
         }
@@ -1963,7 +1958,7 @@ const couponApply = async (req,res,next) => {
     try {
         const userData = await User.findById({_id: req.session.user_id});
         const body = req.params.content;
-        console.log(body);
+       
         const coupon = body.toUpperCase();
 
         const existCoupon = await Coupon.findOne({couponcode: coupon});
@@ -1974,7 +1969,7 @@ const couponApply = async (req,res,next) => {
             req.session.couponApplied = coupon;
 
             if (userCheck) {
-                res.json({message: "Coupon already used"});
+                res.json({message2: "Coupon already used"});
             } else {
                 let products = cartData.products;
                 let prices = products.map((n) => n.pricetotal);
@@ -2013,13 +2008,13 @@ const couponApply = async (req,res,next) => {
                     }
                 } else {
                     res.json({
-                        message: "Purchase atleast for" + existCoupon.minpurchase
+                        message: "Purchase atleast for Rs" + existCoupon.minpurchase
                     });
                 }
             }
 
         } else {
-            console.log("not valid");
+            res.json({ messageinvalid:"Enter a valid coupon"})
         }
     } catch (error) {
         console.log(error.message);
@@ -2029,10 +2024,10 @@ next(error);
 
 const addToWallet = async (req,res,next) => {
     try {
-        console.log("startstartstart");
+       
         if (req.session.user_id) {
             const prodId = req.body.prodId;
-            console.log(prodId);
+        
             const orderId = req.body.orderId;
             const orderProdata = await Order.findOne({
                 _id: orderId
@@ -2079,7 +2074,7 @@ const walletUse = async (req,res,next) => {
       
         const userData = await User.findById({_id: req.session.user_id});
         let wallet = userData.wallet;
-        console.log(wallet);
+        
         if (wallet == 0) {
             res.json({message1: "Your wallet is empty"});
         } else {
@@ -2128,11 +2123,8 @@ const placedorder = async (req,res,next) => {
         let walletReduced = req.session.walletUsed;
         let subtotal = req.session.subtotal
         let total = req.session.totalamount;
-       
-       
-       
-        if (req.session.user_id) {
 
+        if (req.session.user_id) {
 
             const userData = req.session.user_id;
             const categoryData = await Category.find({});
@@ -2283,7 +2275,7 @@ const loadorderhistory = async (req,res,next) => {
             const orderData = await Order
                 .find({userId: req.session.user_id})
                 .sort({createdAt: -1});
-            console.log(orderData);
+          
 
             if (cartData && wishlistData) {
                 const cartcount = cartData.products.length;
@@ -2367,7 +2359,7 @@ const loadorderview = async (req,res,next) => {
                 const cartcount = cartData.products.length;
                 const wishlistcount = wishlistData.products.length;
 
-                console.log("1", userData);
+      
                 res.render("orderdetails", {
                     user_in: userData,
                     categories: categoryData,
@@ -2514,13 +2506,13 @@ const addressEditload = async (req,res,next) => {
             const addressData = await userData
                 .address
                 .find((p) => p._id == req.query.id);
-            console.log(addressData, "addresssssssss");
+        
 
             if (cartData && wishlistData) {
                 const cartcount = cartData.products.length;
                 const wishlistcount = wishlistData.products.length;
 
-                console.log("1", userData);
+             
                 res.render("edit-address", {
                     user_in: userData,
                     addressData,
@@ -2583,7 +2575,7 @@ next(error);
 
 const delete_address = async (req,res,next) => {
     try {
-        console.log("start");
+     
         id = req.query.id;
 
         await User.findOneAndUpdate({
@@ -2595,7 +2587,7 @@ const delete_address = async (req,res,next) => {
                 }
             }
         });
-        console.log("middle");
+    
         res.redirect("/userview");
 
         console.log("end");
@@ -2643,13 +2635,13 @@ const invoiceExport = async (req,res,next) => {
             .findById({_id: id})
             .sort({createdAt: -1})
             .populate("products.item");
-        console.log(orderData, 'here is the data');
+     
         let addressId = orderData.address
 
         const addressData = await User.findOne({
             "address._id": addressId
         }, {"address.$": 1});
-        console.log(addressData, 'addresssssss');
+      
 
         const data = {
           orderData: orderData,

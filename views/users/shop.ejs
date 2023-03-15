@@ -1,7 +1,7 @@
 <%- include('../layouts/header.ejs') %>
     <!-- Navbar End -->
 
-    <!-- Breadcrumb Start -->
+
     <div
         class="container-fluid d-flex justify-content-end mb-4  "
         style="padding-right: 1.9375rem">
@@ -13,17 +13,13 @@
                         class="btn1 btn1-sm btn1-light dropdown-toggle"
                         data-toggle="dropdown">Sort By Price</button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#" data-sort-option="low-to-high">Low to High</a>
-                        <a class="dropdown-item" href="#" data-sort-option="high-to-low">High to Low</a>
+                        <a class="dropdown-item sortthis" href="#" data-sort-option="low-to-high">Low to High</a>
+                        <a class="dropdown-item sortthis" href="#" data-sort-option="high-to-low">High to Low</a>
 
                     </div>
 
                 </div>
-                <!-- <div class="btn-group ml-2"> <button type="button" class="btn btn-sm
-                btn-light dropdown-toggle" data-toggle="dropdown">Showing</button> <div
-                class="dropdown-menu dropdown-menu-right"> <a class="dropdown-item"
-                href="#">10</a> <a class="dropdown-item" href="#">20</a> <a
-                class="dropdown-item" href="#">30</a> </div> </div> -->
+              
             </div>
         </div>
     </div>
@@ -34,11 +30,11 @@
         <div class="row px-xl-5">
             <!-- Shop Sidebar Start -->
             <div class="col-lg-3 col-md-4">
-                <!-- Price Start -->
+         
 
-                <!-- Price End -->
+            
 
-                <!-- Color Start -->
+             
 
                 <h5 class="section-title position-relative text-uppercase mb-3">
                     <span class="bg-secondary pr-3">Filter by category</span></h5>
@@ -71,9 +67,6 @@
             <div class="col-lg-9 col-md-8 ">
                 <div class="row pb-3" id="sortArea">
 
-                    <!-- <div class="col-lg-9 col-md-8"> <div class="row pb-3" id="sortArea"> <div
-                    class="col-12 pb-1"> <div class="d-flex align-items-center
-                    justify-content-between mb-4"> -->
 
                     <% if(product_data.length>0){%>
 
@@ -168,7 +161,7 @@
                 </div>
             </div>
         </div>
-        <!-- Shop Product End -->
+     
     </div>
 </div>
 <!-- Shop End -->
@@ -180,12 +173,12 @@
 
 <script>
   function categoryclick(checkbox) {
-        var sortOption = $('.dropdown-item.active').data('sort-option');
+        var sortOption = $('.sortthis.active').data('sort-option');
         let categoryIds = []
         let checkedCheckboxes = document.querySelectorAll('input[name="category"]:checked');
         if (checkedCheckboxes.length === 0) {
             $("#allCategory").prop("checked", true);
-            categoryIds.push('all'); // Use 'all' to indicate no category filter
+            categoryIds.push('all'); 
         } else {
             for (let i = 0; i < checkedCheckboxes.length; i++) {
                 let categoryId = checkedCheckboxes[i].id.replace("category-", "");
@@ -193,7 +186,7 @@
             }
             $("#allCategory").prop("checked", false);
         }
-        let searchFilter = $('#searchInput').val(); // Retrieve search filter
+        let searchFilter = $('#searchInput').val(); 
         filteredProducts(categoryIds, sortOption, searchFilter);
     
     }
@@ -254,7 +247,7 @@ console.log('here1');
         })
     }
 
-   $('.dropdown-item').on('click', function (e) {
+   $('.sortthis').on('click', function (e) {
         e.preventDefault();
         var sortOption = $(this).data('sort-option');
         let categoryIds = []
@@ -305,6 +298,12 @@ console.log('here1');
 
                     }, 3000);
 
+                }else if(response.message2){
+                     Toast.fire({icon: 'error', title: response.message2})
+                     setTimeout(() => {
+                        window.location.href = "/shop"
+
+                    }, 3000);
                 }
 
             }
