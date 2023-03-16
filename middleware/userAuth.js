@@ -4,7 +4,7 @@ const isLogout=async(req,res,next)=>{
     try {
         if(req.session.user_id){
            
-            res.redirect('/home')
+            res.redirect('/')
             
         }else{
             next()
