@@ -275,6 +275,7 @@
 
 
     <script>
+      
         var addressModal = document.getElementById("address-modal");
         var addAddressLink = document.getElementById("add-address-link");
 
@@ -522,6 +523,7 @@ if (content.trim() !== "") {
                          document.getElementById('discountW').textContent = response.discount
                          document.getElementById("walletdiscnt").value = response.discount
                         document.getElementById('walletAmnt').textContent = "Wallet Amount:Rs "+ response.walletNew   
+                        
                     }else if(response.success == false){
                       
                         Toast.fire({
@@ -534,6 +536,7 @@ if (content.trim() !== "") {
                         document.getElementById('discountW').textContent = response.total
                         document.getElementById("walletdiscnt").value = response.total
                         document.getElementById('walletAmnt').textContent = "Wallet Amount:Rs " + response.updatedWallet  
+                       
 
                     } else if (response.message1) {
                         Toast.fire({
