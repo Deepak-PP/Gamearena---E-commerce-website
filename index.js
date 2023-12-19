@@ -1,3 +1,4 @@
+require('text-encoding').encoding; 
 require("dotenv").config();
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
