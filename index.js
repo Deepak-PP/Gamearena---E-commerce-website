@@ -19,9 +19,9 @@ const path = require("path");
 const session = require("express-session");
 app.use(
   session({
-    secret: "keyboard cat",
+    secret: "cookie_secret",
+    resave: true,
     saveUninitialized: true,
-    cookie: { secure: false },
   })
 );
 
